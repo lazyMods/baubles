@@ -1,6 +1,6 @@
 <h1 align="center">Baubles API</h1>
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/lazyMods/Baubles/master/src/main/resources/BLogo.png"><br>
+  <img src="https://raw.githubusercontent.com/lazyMods/Baubles/master/src/main/resources/flogo.png"><br>
 </h1>
 
 <p align="center">
@@ -32,7 +32,7 @@
 
 Mod API originally created by **@Azanor** that adds 7 slots to the player inventory.
 
-You can learn how to use the API [here](https://github.com/lazyMods/Baubles/wiki).
+You can learn how to use the API [here](https://github.com/lazyMods/Baubles/wiki/Intro).
 
 For any questions DM me on twitter: *@_nesslazy*
 
