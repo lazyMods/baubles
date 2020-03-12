@@ -16,12 +16,12 @@
     <img alt="Repository issues" src="https://img.shields.io/github/issues/lazyMods/Baubles.svg">
   </a>
 
-  <a href="https://www.curseforge.com/minecraft/mc-mods/baubles-revamp">
-    <img alt="Repository issues" src="http://cf.way2muchnoise.eu/full_362380_downloads.svg">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/baubles-reborn">
+    <img alt="Repository issues" src="http://cf.way2muchnoise.eu/full_366844_downloads.svg">
   </a>
 
-  <a href="https://www.curseforge.com/minecraft/mc-mods/block-actions">
-    <img alt="Repository issues" src="http://cf.way2muchnoise.eu/versions/362380.svg">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/baubles-reborn">
+    <img alt="Repository issues" src="http://cf.way2muchnoise.eu/versions/366844.svg">
   </a>
 
   <img alt="License" src="https://img.shields.io/badge/license-ANS3.0NC-yellow">
