@@ -1,0 +1,13 @@
+modLoader="javafml" #mandatory
+loaderVersion="[28,)" #mandatory (28 is current forge version)
+issueTrackerURL="http://my.issue.tracker/" #optional
+[[mods]] #mandatory
+modId="baubles" #mandatory
+version="1.6.0" #mandatory
+displayName="Baubles" #mandatory
+updateJSONURL="http://myurl.me/" #optional
+displayURL="http://example.com/" #optional
+logoFile="BLogo.png" #optional
+credits="Azanor" #optional
+authors="lazynessmind" #optional
+description='''Adding a touch of bling to Minecraft'''
