@@ -1,6 +1,6 @@
 <h1 align="center">Baubles API</h1>
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/lazyMods/Baubles/master/src/main/resources/flogo.png"><br>
+  <img src="https://raw.githubusercontent.com/lazyMods/Baubles/master/src/main/resources/BLogo.png"><br>
 </h1>
 
 <p align="center">
