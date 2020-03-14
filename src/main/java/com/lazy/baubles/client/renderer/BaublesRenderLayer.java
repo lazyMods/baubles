@@ -3,7 +3,9 @@ package com.lazy.baubles.client.renderer;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.api.render.IRenderBauble;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
@@ -20,12 +22,12 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
     }
 
     @Override
-    public void render(@Nonnull PlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, PlayerEntity player, float limbSwing, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
         //TODO
 		/*if(!Config.renderBaubles || player.getActivePotionEffect(MobEffects.INVISIBILITY) != null)
-			return;
-*/
+			return;*/
+
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(inv -> {
             dispatchRenders(inv, player, IRenderBauble.RenderType.BODY, partialTicks);
             float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
@@ -56,10 +58,5 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
                 });
             }
         }
-    }
-
-    @Override
-    public boolean shouldCombineTextures() {
-        return false;
     }
 }

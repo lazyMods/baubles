@@ -7,6 +7,7 @@ import com.lazy.baubles.api.cap.BaublesContainerProvider;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.network.PacketHandler;
 import com.lazy.baubles.network.SyncPacket;
+import com.sun.javafx.geom.Vec3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -35,7 +37,7 @@ public class EventHandlerEntity {
         try {
             event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bco -> {
                 CompoundNBT nbt = ((BaublesContainer) bco).serializeNBT();
-                event.getEntityPlayer().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
+                event.getPlayer().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
                     ((BaublesContainer) bcn).deserializeNBT(nbt);
                 });
             });
@@ -103,7 +105,8 @@ public class EventHandlerEntity {
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
             for (int i = 0; i < baubles.getSlots(); ++i) {
                 if (!baubles.getStackInSlot(i).isEmpty()) {
-                    ItemEntity ei = new ItemEntity(player.world, player.posX, player.posY + player.getEyeHeight(), player.posZ, baubles.getStackInSlot(i).copy());
+                    Vec3d playerPos = player.getPositionVec();
+                    ItemEntity ei = new ItemEntity(player.world, playerPos.x, playerPos.y + player.getEyeHeight(), playerPos.z, baubles.getStackInSlot(i).copy());
                     ei.setPickupDelay(40);
                     drops.add(ei);
                     baubles.setStackInSlot(i, ItemStack.EMPTY);
