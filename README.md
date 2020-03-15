@@ -36,6 +36,10 @@ You can learn how to use the API [here](https://github.com/lazyMods/Baubles/wiki
 
 For any questions DM me on twitter: *@_nesslazy*
 
+## Require template for Baubles:
+
+<img alt="require" src="https://raw.githubusercontent.com/lazyMods/Baubles/1.15.2/requires.png" width="145px" height="70px">
+
 ### Disclaimer:
 
 I am not the original creator of the mod! I just ported to 1.14.
