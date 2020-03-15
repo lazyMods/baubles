@@ -36,16 +36,12 @@ public class PlayerExpandedContainer extends Container {
 
     public IBaublesItemHandler baubles;
 
-    public PlayerExpandedContainer(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, !Minecraft.getInstance().world.isRemote, Minecraft.getInstance().player);
-    }
-
-    public PlayerExpandedContainer(int id, PlayerInventory playerInventory, boolean localWorld, PlayerEntity playerIn) {
+    public PlayerExpandedContainer(int id, PlayerInventory playerInventory, boolean localWorld) {
         super(Baubles.Registration.PLAYER_BAUBLES, id);
         this.isLocalWorld = localWorld;
-        this.player = playerIn;
+        this.player = playerInventory.player;
 
-        this.baubles = player.getCapability(BaublesCapabilities.BAUBLES).orElseThrow(NullPointerException::new);
+        this.baubles = this.player.getCapability(BaublesCapabilities.BAUBLES).orElseThrow(NullPointerException::new);
 
         this.addSlot(new CraftingResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 154, 28));
 

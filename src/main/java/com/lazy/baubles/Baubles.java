@@ -3,9 +3,11 @@ package com.lazy.baubles;
 import com.lazy.baubles.container.PlayerExpandedContainer;
 import com.lazy.baubles.proxy.ClientProxy;
 import com.lazy.baubles.proxy.CommonProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,7 +40,8 @@ public class Baubles {
         public static List<ContainerType<?>> CONTAINERS = new ArrayList<>();
 
         @ObjectHolder("baubles:player_baubles")
-        public static ContainerType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", PlayerExpandedContainer::new);
+        public static ContainerType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", (id, inv, buffer)->
+                new PlayerExpandedContainer(id, inv, !inv.player.world.isRemote));
 
         private static <T extends Container> ContainerType<T> createContainer(String name, IContainerFactory<T> factory) {
             ContainerType<T> containerType = IForgeContainerType.create(factory);
