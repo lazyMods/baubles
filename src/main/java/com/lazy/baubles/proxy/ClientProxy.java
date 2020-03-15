@@ -4,9 +4,11 @@ import com.lazy.baubles.Baubles;
 import com.lazy.baubles.client.gui.PlayerExpandedScreen;
 import com.lazy.baubles.client.renderer.BaublesRenderLayer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -48,5 +50,13 @@ public class ClientProxy extends CommonProxy {
 
         render = skinMap.get("slim");
         render.addLayer(new BaublesRenderLayer(render));
+    }
+
+    public World getClientWorld(){
+        return Minecraft.getInstance().world;
+    }
+
+    public ClientPlayerEntity getClientPlayer(){
+        return Minecraft.getInstance().player;
     }
 }
