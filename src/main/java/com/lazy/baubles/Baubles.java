@@ -38,7 +38,7 @@ public class Baubles {
         public static List<ContainerType<?>> CONTAINERS = new ArrayList<>();
 
         @ObjectHolder("baubles:player_baubles")
-        public static ContainerType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", PlayerExpandedContainer::new);
+        public static ContainerType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", (id, inv, data) -> new PlayerExpandedContainer(id, inv, !inv.player.world.isRemote));
 
         private static <T extends Container> ContainerType<T> createContainer(String name, IContainerFactory<T> factory) {
             ContainerType<T> containerType = IForgeContainerType.create(factory);
