@@ -1,12 +1,10 @@
 modLoader="javafml" #mandatory
 loaderVersion="[28,)" #mandatory (28 is current forge version)
-issueTrackerURL="http://my.issue.tracker/" #optional
+issueTrackerURL="https://github.com/lazyMods/Baubles/issues" #optional
 [[mods]] #mandatory
 modId="baubles" #mandatory
-version="1.6.0" #mandatory
+version="1.6.1" #mandatory
 displayName="Baubles" #mandatory
-updateJSONURL="http://myurl.me/" #optional
-displayURL="http://example.com/" #optional
 logoFile="BLogo.png" #optional
 credits="Azanor" #optional
 authors="lazynessmind" #optional
