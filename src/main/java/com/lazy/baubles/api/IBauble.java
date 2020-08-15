@@ -20,19 +20,19 @@ public interface IBauble {
     /**
      * This method is called once per tick if the bauble is being worn by a player
      */
-    default void onWornTick(LivingEntity player) {
+    default void onWornTick(LivingEntity player, net.minecraft.item.ItemStack stackIn) {/* Changed: Added argument ItemStack stackIn. */
     }
 
     /**
      * This method is called when the bauble is equipped by a player
      */
-    default void onEquipped(LivingEntity player) {
+    default void onEquipped(LivingEntity player, net.minecraft.item.ItemStack stackIn) {/* Changed: Added argument ItemStack stackIn. */
     }
 
     /**
      * This method is called when the bauble is unequipped by a player
      */
-    default void onUnequipped(LivingEntity player) {
+    default void onUnequipped(LivingEntity player, net.minecraft.item.ItemStack stackIn) {/* Changed: Added argument ItemStack stackIn. */
     }
 
     /**
