@@ -35,7 +35,7 @@ public class EventHandlerEntity {
         try {
             event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bco -> {
                 CompoundNBT nbt = ((BaublesContainer) bco).serializeNBT();
-                event.getEntityPlayer().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
+                event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
                     ((BaublesContainer) bcn).deserializeNBT(nbt);
                 });
             });
@@ -103,7 +103,7 @@ public class EventHandlerEntity {
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
             for (int i = 0; i < baubles.getSlots(); ++i) {
                 if (!baubles.getStackInSlot(i).isEmpty()) {
-                    ItemEntity ei = new ItemEntity(player.world, player.posX, player.posY + player.getEyeHeight(), player.posZ, baubles.getStackInSlot(i).copy());
+                    ItemEntity ei = new ItemEntity(player.world, player.getPosX(), player.getPosY() + player.getEyeHeight(), player.getPosZ(), baubles.getStackInSlot(i).copy());
                     ei.setPickupDelay(40);
                     drops.add(ei);
                     baubles.setStackInSlot(i, ItemStack.EMPTY);

@@ -1,7 +1,6 @@
 package com.lazy.baubles.event;
 
 import com.lazy.baubles.Baubles;
-import com.lazy.baubles.api.BaubleType;
 import com.lazy.baubles.api.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.item.ItemStack;
@@ -23,11 +22,11 @@ public class AttachCapability {
     private static ResourceLocation cap = new ResourceLocation(Baubles.MODID, "bauble_cap");
 
     @SubscribeEvent
-    public static void attachCaps(AttachCapabilitiesEvent<ItemStack> event){
+    public static void attachCaps(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = event.getObject();
-        if(stack.getItem() instanceof IBauble){
+        if (stack.getItem() instanceof IBauble) {
             event.addCapability(cap, new ICapabilityProvider() {
-                private final LazyOptional<IBauble> opt = LazyOptional.of(() -> (IBauble)stack.getItem());
+                private final LazyOptional<IBauble> opt = LazyOptional.of(() -> (IBauble) stack.getItem());
 
                 @Nonnull
                 @Override

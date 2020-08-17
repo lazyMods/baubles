@@ -1,6 +1,7 @@
 package com.lazy.baubles.container.slots;
 
 import com.lazy.baubles.container.PlayerExpandedContainer;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -8,10 +9,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import org.apache.commons.lang3.reflect.FieldUtils;
+import net.minecraft.util.ResourceLocation;
 
-import java.lang.reflect.Field;
+import javax.annotation.Nullable;
 
 public class ArmorSlot extends Slot {
 
@@ -40,9 +40,9 @@ public class ArmorSlot extends Slot {
         return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.canTakeStack(playerIn);
     }
 
+    @Nullable
     @Override
-    public String getSlotTexture() {
-        return PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()];
+    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() { //getSlotTexture
+        return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()]);
     }
-
 }

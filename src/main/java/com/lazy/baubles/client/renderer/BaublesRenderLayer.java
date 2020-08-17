@@ -3,15 +3,15 @@ package com.lazy.baubles.client.renderer;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.api.render.IRenderBauble;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nonnull;
 
 public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>> extends LayerRenderer<T, M> {
 
@@ -20,8 +20,7 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
     }
 
     @Override
-    public void render(@Nonnull PlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-
+    public void render(MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, PlayerEntity player, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         //TODO
 		/*if(!Config.renderBaubles || player.getActivePotionEffect(MobEffects.INVISIBILITY) != null)
 			return;
@@ -56,10 +55,5 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
                 });
             }
         }
-    }
-
-    @Override
-    public boolean shouldCombineTextures() {
-        return false;
     }
 }

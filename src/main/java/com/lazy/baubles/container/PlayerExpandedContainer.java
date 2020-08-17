@@ -7,7 +7,6 @@ import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.container.slots.ArmorSlot;
 import com.lazy.baubles.container.slots.OffHandSlot;
 import com.lazy.baubles.container.slots.SlotBauble;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,12 +14,9 @@ import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.inventory.container.WorkbenchContainer;
+import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
@@ -29,7 +25,7 @@ import java.lang.reflect.Method;
 
 public class PlayerExpandedContainer extends Container {
 
-    public static final String[] ARMOR_SLOT_TEXTURES = new String[]{"item/empty_armor_slot_boots", "item/empty_armor_slot_leggings", "item/empty_armor_slot_chestplate", "item/empty_armor_slot_helmet"};
+    public static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{PlayerContainer.EMPTY_ARMOR_SLOT_BOOTS, PlayerContainer.EMPTY_ARMOR_SLOT_LEGGINGS, PlayerContainer.EMPTY_ARMOR_SLOT_CHESTPLATE, PlayerContainer.EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] VALID_EQUIPMENT_SLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final CraftingInventory craftMatrix = new CraftingInventory(this, 2, 2);
     private final CraftResultInventory craftResult = new CraftResultInventory();
@@ -207,7 +203,7 @@ public class PlayerExpandedContainer extends Container {
         return slot.inventory != this.craftResult && super.canMergeSlot(stack, slot);
     }
 
-    private void addBaubleSlots(){
+    private void addBaubleSlots() {
 
     }
 }

@@ -9,7 +9,6 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
@@ -19,17 +18,14 @@ archivesBaseName = 'baubles'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: "${mcp_channel}", version: "${mcp_version}"
-
     runs {
         client {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
             property 'forge.logging.console.level', 'debug'
-
             mods {
                 examplemod {
                     source sourceSets.main
@@ -39,11 +35,8 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
             property 'forge.logging.console.level', 'debug'
-
             mods {
                 examplemod {
                     source sourceSets.main
@@ -53,13 +46,9 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
             property 'forge.logging.console.level', 'debug'
-
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
-
             mods {
                 examplemod {
                     source sourceSets.main
@@ -70,7 +59,7 @@ minecraft {
 }
 
 dependencies {
-   minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 }
 
 jar {
@@ -87,16 +76,12 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
+jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
         }
     }
     repositories {
