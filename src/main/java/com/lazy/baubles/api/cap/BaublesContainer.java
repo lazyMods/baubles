@@ -79,7 +79,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
         for (int i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
             stack.getCapability(BaublesCapabilities.ITEM_BAUBLE)
-                    .ifPresent(b -> b.onWornTick(holder));
+                    .ifPresent(b -> b.onWornTick(holder, stack));/* Changed: updated input argument stack. */
         }
         sync();
     }

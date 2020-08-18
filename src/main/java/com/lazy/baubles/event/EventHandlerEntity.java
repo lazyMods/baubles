@@ -7,7 +7,7 @@ import com.lazy.baubles.api.cap.BaublesContainerProvider;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.network.PacketHandler;
 import com.lazy.baubles.network.SyncPacket;
-import com.sun.javafx.geom.Vec3f;
+//import com.sun.javafx.geom.Vec3f; Unused
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
