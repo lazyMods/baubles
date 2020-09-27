@@ -185,7 +185,7 @@ public class PlayerExpandedContainer extends Container {
 
             if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble && itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).isPresent()) {
                 ItemStack finalItemstack = itemstack;
-                itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn)));
+                itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemstack)));
             }
 
             ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);

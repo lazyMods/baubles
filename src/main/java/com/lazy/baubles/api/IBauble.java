@@ -1,6 +1,7 @@
 package com.lazy.baubles.api;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 
 /**
  * This interface should be extended by items that can be worn in bauble slots
@@ -20,19 +21,19 @@ public interface IBauble {
     /**
      * This method is called once per tick if the bauble is being worn by a player
      */
-    default void onWornTick(LivingEntity player) {
+    default void onWornTick(LivingEntity player, ItemStack stack) {
     }
 
     /**
      * This method is called when the bauble is equipped by a player
      */
-    default void onEquipped(LivingEntity player) {
+    default void onEquipped(LivingEntity player, ItemStack stack) {
     }
 
     /**
      * This method is called when the bauble is unequipped by a player
      */
-    default void onUnequipped(LivingEntity player) {
+    default void onUnequipped(LivingEntity player, ItemStack stack) {
     }
 
     /**
