@@ -1,4 +1,4 @@
-package com.lazy.baubles.api;
+package com.lazy.baubles.api.bauble;
 
 public enum BaubleType {
     AMULET(0),
@@ -24,5 +24,17 @@ public enum BaubleType {
 
     public int[] getValidSlots() {
         return validSlots;
+    }
+
+    public static BaubleType getFromString(String type){
+        switch (type) {
+            case "ring": return BaubleType.RING;
+            case "amulet": return BaubleType.AMULET;
+            case "belt": return BaubleType.BELT;
+            case "head": return BaubleType.HEAD;
+            case "body": return BaubleType.BODY;
+            case "charm": return BaubleType.CHARM;
+        }
+        return TRINKET;
     }
 }
