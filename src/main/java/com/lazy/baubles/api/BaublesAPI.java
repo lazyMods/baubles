@@ -1,5 +1,6 @@
 package com.lazy.baubles.api;
 
+import com.lazy.baubles.api.bauble.BaubleType;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
  * @author Azanor
  * @author lazynessmind - porter
  */
-public class BaublesApi {
+public class BaublesAPI {
 
     //Retrieves the baubles inventory capability handler for the supplied player
     public static LazyOptional<IBaublesItemHandler> getBaublesHandler(PlayerEntity player) {
@@ -27,5 +28,17 @@ public class BaublesApi {
             }
             return -1;
         }).orElse(-1);
+    }
+
+    public static int getEmptySlotForBaubleType(PlayerEntity playerEntity, BaubleType type){
+        IBaublesItemHandler itemHandler = getBaublesHandler(playerEntity).orElseThrow(NullPointerException::new);
+
+        for(int i : type.getValidSlots()){
+            if(itemHandler.getStackInSlot(i).isEmpty()){
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

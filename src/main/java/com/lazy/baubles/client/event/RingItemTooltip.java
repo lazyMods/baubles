@@ -1,7 +1,7 @@
 package com.lazy.baubles.client.event;
 
 import com.lazy.baubles.Baubles;
-import com.lazy.baubles.api.BaubleType;
+import com.lazy.baubles.api.bauble.BaubleType;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;

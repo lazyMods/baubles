@@ -1,7 +1,7 @@
 package com.lazy.baubles.event;
 
 import com.lazy.baubles.Baubles;
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;

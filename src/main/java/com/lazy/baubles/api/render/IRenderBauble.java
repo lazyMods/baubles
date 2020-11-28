@@ -1,6 +1,6 @@
 package com.lazy.baubles.api.render;
 
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.IBauble;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;

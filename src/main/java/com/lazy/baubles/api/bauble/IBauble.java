@@ -1,4 +1,4 @@
-package com.lazy.baubles.api;
+package com.lazy.baubles.api.bauble;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

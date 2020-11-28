@@ -1,7 +1,7 @@
 package com.lazy.baubles.api.cap.caps;
 
-import com.lazy.baubles.api.BaubleType;
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.BaubleType;
+import com.lazy.baubles.api.bauble.IBauble;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;

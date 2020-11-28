@@ -1,6 +1,6 @@
 package com.lazy.baubles.api.cap;
 
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.IBauble;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 

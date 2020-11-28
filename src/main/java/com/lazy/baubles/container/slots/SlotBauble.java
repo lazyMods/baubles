@@ -1,6 +1,6 @@
 package com.lazy.baubles.container.slots;
 
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.PlayerEntity;

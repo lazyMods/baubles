@@ -1,6 +1,6 @@
 package com.lazy.baubles.proxy;
 
-import com.lazy.baubles.api.IBauble;
+import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.api.cap.caps.BaubleCap;
 import com.lazy.baubles.api.cap.caps.BaublesItemHandlerCap;
