@@ -25,66 +25,66 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
     }
 
     @Override
-    public void func_231023_e_() { //tick
+    public void tick() { //tick
         this.container.baubles.setEventBlock(false);
         this.updateActivePotionEffects();
         this.resetGuiLeft();
     }
 
     @Override
-    protected void func_231160_c_() { //init
-        this.field_230710_m_.clear(); //this.buttons
-        super.func_231160_c_();
+    protected void init() { //init
+        this.buttons.clear(); //this.buttons
+        super.init();
         this.resetGuiLeft();
     }
 
     @Override
-    protected void func_230451_b_(MatrixStack matrixStack, int p_146979_1_, int p_146979_2_) { //drawGuiContainerForegroundLayer
-        if (this.field_230706_i_ != null) { //this.minecraft
-            this.field_230706_i_.fontRenderer.func_243248_b(matrixStack, new TranslationTextComponent("container.crafting"), 115, 8, 4210752);
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int p_146979_1_, int p_146979_2_) { //drawGuiContainerForegroundLayer
+        if (this.minecraft != null) { //this.minecraft
+            this.minecraft.fontRenderer.func_243248_b(matrixStack, new TranslationTextComponent("container.crafting"), 115, 8, 4210752);
         }
     }
 
     @Override
-    public void func_230430_a_(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
-        this.func_230446_a_(matrixStack); //renderBackground
-        super.func_230430_a_(matrixStack, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrixStack, mouseX, mouseY); //renderHoveredToolTip
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
+        this.renderBackground(matrixStack); //renderBackground
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //renderHoveredToolTip
         this.oldMouseX = (float) mouseX;
         this.oldMouseY = (float) mouseY;
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) { //drawGuiContainerBackgroundLayer
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) { //drawGuiContainerBackgroundLayer
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        if (this.field_230706_i_ != null) {
-            this.field_230706_i_.getTextureManager().bindTexture(background);
+        if (this.minecraft != null) {
+            this.minecraft.getTextureManager().bindTexture(background);
             int k = this.guiLeft;
             int l = this.guiTop;
-            this.func_238474_b_(matrixStack, k, l, 0, 0, this.xSize, this.ySize);  //blit
+            this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize);  //blit
             for (int i1 = 0; i1 < this.container.inventorySlots.size(); ++i1) {
                 Slot slot = this.container.inventorySlots.get(i1);
                 if (slot.getHasStack() && slot.getSlotStackLimit() == 1) {
-                    this.func_238474_b_(matrixStack, k + slot.xPos, l + slot.yPos, 200, 0, 16, 16);
+                    this.blit(matrixStack, k + slot.xPos, l + slot.yPos, 200, 0, 16, 16);
                 }
             }
-            InventoryScreen.drawEntityOnScreen(k + 51, l + 75, 30, (float) (k + 51) - this.oldMouseX, (float) (l + 75 - 50) - this.oldMouseY, this.field_230706_i_.player);
+            InventoryScreen.drawEntityOnScreen(k + 51, l + 75, 30, (float) (k + 51) - this.oldMouseX, (float) (l + 75 - 50) - this.oldMouseY, this.minecraft.player);
         }
     }
 
     @Override
-    public boolean func_231046_a_(int keyCode, int scanCode, int what) { //keyPressed
+    public boolean keyPressed(int keyCode, int scanCode, int what) { //keyPressed
         if (ClientProxy.KEY_BAUBLES.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) {
-            if (this.field_230706_i_ != null) {
-                this.field_230706_i_.player.closeScreen();
+            if (this.minecraft != null) {
+                this.minecraft.player.closeScreen();
             }
             return true;
         } else {
-            return super.func_231046_a_(keyCode, scanCode, what);
+            return super.keyPressed(keyCode, scanCode, what);
         }
     }
 
     private void resetGuiLeft() {
-        this.guiLeft = (this.field_230708_k_ - this.xSize) / 2; //width
+        this.guiLeft = (this.width - this.xSize) / 2; //width
     }
 }

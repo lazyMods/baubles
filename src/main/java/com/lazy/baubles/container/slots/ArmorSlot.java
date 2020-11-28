@@ -42,7 +42,7 @@ public class ArmorSlot extends Slot {
 
     @Nullable
     @Override
-    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() { //getSlotTexture
+    public Pair<ResourceLocation, ResourceLocation> getBackground() { //getSlotTexture
         return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()]);
     }
 }

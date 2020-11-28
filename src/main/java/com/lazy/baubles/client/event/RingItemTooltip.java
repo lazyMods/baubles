@@ -19,7 +19,7 @@ public class RingItemTooltip {
             event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
                 BaubleType bt = bauble.getBaubleType();
                 TranslationTextComponent text = new TranslationTextComponent("name." + bt);
-                text.getStyle().func_240712_a_(TextFormatting.GOLD); //setColor(TextFormatting)
+                text.getStyle().applyFormatting(TextFormatting.GOLD); //setColor(TextFormatting)
                 event.getToolTip().add(text);
             });
         }

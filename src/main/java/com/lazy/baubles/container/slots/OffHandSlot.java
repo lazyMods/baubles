@@ -22,7 +22,7 @@ public class OffHandSlot extends Slot {
 
     @Nullable
     @Override
-    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() { //getSlotTexture
+    public Pair<ResourceLocation, ResourceLocation> getBackground() { //getSlotTexture
         return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
     }
 }

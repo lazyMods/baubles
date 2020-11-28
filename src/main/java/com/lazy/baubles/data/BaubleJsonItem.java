@@ -74,7 +74,7 @@ public class BaubleJsonItem extends Item implements IBauble {
         if(stack.getTag() != null){
             model.forEach(model->{
                 if(this.isRing(stack, model.getRegistryName())){
-                    textComponent.func_240702_b_(model.getDisplayName());
+                    textComponent.appendString(model.getDisplayName());
                 }
             });
         }

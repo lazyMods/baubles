@@ -19,22 +19,13 @@ public class BaublesButton extends AbstractButton {
 
     private final ContainerScreen parentGui;
 
-    //temp
-    public boolean _isHovered = this.field_230692_n_;
-    public boolean _visible = this.field_230693_o_;
-    public int _x = this.field_230690_l_;
-    public int _y = this.field_230691_m_;
-    public int _width = this.field_230688_j_;
-    public int _height = this.field_230689_k_;
-
-
     public BaublesButton(ContainerScreen parentGui, int x, int y, int width, int height) {
         super(x + parentGui.getGuiLeft(), parentGui.getGuiTop() + y, width, height, new StringTextComponent(""));
         this.parentGui = parentGui;
     }
 
     @Override
-    public void func_230930_b_() { //onPress
+    public void onPress() { //onPress
         if (parentGui instanceof InventoryScreen) {
             PacketHandler.INSTANCE.sendToServer(new OpenBaublesInvPacket());
         } else {
@@ -44,15 +35,15 @@ public class BaublesButton extends AbstractButton {
     }
 
     @Override
-    public void func_230430_a_(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
         if(!Minecraft.getInstance().player.isCreative()){
-            if (this._visible) {
+            if (this.visible) {
                 FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
                 Minecraft.getInstance().getTextureManager().bindTexture(PlayerExpandedScreen.background);
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 Minecraft.getInstance().getTextureManager().bindTexture(PlayerExpandedScreen.background);
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this._isHovered = mouseX >= _x && mouseY >= this._y && mouseX < _x + this._width && mouseY < this._y + this._height;
+                this.isHovered = mouseX >= x && mouseY >= this.y && mouseX < x + this.width && mouseY < this.y + this.height;
                 GlStateManager.enableBlend();
                 GlStateManager.blendFuncSeparate(770, 771, 1, 0);
                 GlStateManager.blendFuncSeparate(770, 771, 1, 0);
@@ -61,11 +52,11 @@ public class BaublesButton extends AbstractButton {
                 GlStateManager.pushMatrix();
                 GlStateManager.translatef(0, 0, 200);
                 GlStateManager.translatef(0, 0, 200);
-                if (!_isHovered) {
-                    this.func_238474_b_(matrixStack, _x, this._y, 200, 48, 10, 10); //blit
+                if (!isHovered) {
+                    this.blit(matrixStack, x, this.y, 200, 48, 10, 10); //blit
                 } else {
-                    this.func_238474_b_(matrixStack, _x, this._y, 210, 48, 10, 10); //blit
-                    this.func_238471_a_(matrixStack, fontrenderer, new TranslationTextComponent("button.displayText").getString(), _x + 5, this._y + this._height, 0xffffff); //drawCenteredString
+                    this.blit(matrixStack, x, this.y, 210, 48, 10, 10); //blit
+                    fontrenderer.drawString(matrixStack, new TranslationTextComponent("button.displayText").getString(), x + 5, this.y + this.height, 0xffffff); //drawCenteredString
                 }
                 GlStateManager.popMatrix();
             }
