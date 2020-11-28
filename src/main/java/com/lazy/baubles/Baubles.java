@@ -1,10 +1,13 @@
 package com.lazy.baubles;
 
+import com.lazy.baubles.data.BaubleJsonItem;
+import com.lazy.baubles.data.json.BaubleJson;
 import com.lazy.baubles.container.PlayerExpandedContainer;
 import com.lazy.baubles.proxy.ClientProxy;
 import com.lazy.baubles.proxy.CommonProxy;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -50,6 +53,11 @@ public class Baubles {
         @SubscribeEvent
         public static void onContainerRegister(final RegistryEvent.Register<ContainerType<?>> event) {
             event.getRegistry().registerAll(CONTAINERS.toArray(new ContainerType[0]));
+        }
+
+        @SubscribeEvent
+        public static void onItemRegister(RegistryEvent.Register<Item> e){
+            e.getRegistry().register(new BaubleJsonItem(BaubleJson.loadBaubles()));
         }
     }
 }
