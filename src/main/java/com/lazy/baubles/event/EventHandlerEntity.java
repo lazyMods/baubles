@@ -1,6 +1,8 @@
 package com.lazy.baubles.event;
 
 import com.lazy.baubles.Baubles;
+import com.lazy.baubles.api.BaublesAPI;
+import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import com.lazy.baubles.api.cap.BaublesContainer;
 import com.lazy.baubles.api.cap.BaublesContainerProvider;
@@ -20,6 +22,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -74,6 +77,33 @@ public class EventHandlerEntity {
         if (event.phase == TickEvent.Phase.END) {
             PlayerEntity player = event.player;
             player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(IBaublesItemHandler::tick);
+        }
+    }
+
+    @SubscribeEvent
+    public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
+        ItemStack itemstack = event.getPlayer().getHeldItem(event.getHand());
+
+        if (itemstack.getItem() instanceof IBauble) {
+            IBauble bauble = (IBauble) itemstack.getItem();
+
+            IBaublesItemHandler itemHandler = BaublesAPI.getBaublesHandler(event.getPlayer()).orElseThrow(NullPointerException::new);
+            int emptySlot = BaublesAPI.getEmptySlotForBaubleType(event.getPlayer(), bauble.getBaubleType());
+
+            if (emptySlot != -1) {
+                itemHandler.setStackInSlot(emptySlot, itemstack.copy());
+                itemstack.setCount(0);
+            }
+        } else if (itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE).isPresent()) {
+            IBauble bauble = itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE).orElseThrow(NullPointerException::new);
+
+            IBaublesItemHandler itemHandler = BaublesAPI.getBaublesHandler(event.getPlayer()).orElseThrow(NullPointerException::new);
+            int emptySlot = BaublesAPI.getEmptySlotForBaubleType(event.getPlayer(), bauble.getBaubleType());
+
+            if (emptySlot != -1) {
+                itemHandler.setStackInSlot(emptySlot, itemstack.copy());
+                itemstack.setCount(0);
+            }
         }
     }
 
