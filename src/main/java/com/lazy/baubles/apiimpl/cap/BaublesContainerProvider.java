@@ -1,5 +1,8 @@
-package com.lazy.baubles.api.cap;
+package com.lazy.baubles.apiimpl.cap;
 
+import com.lazy.baubles.api.cap.BaublesCapabilities;
+import com.lazy.baubles.api.cap.IBaublesItemHandler;
+import com.lazy.baubles.apiimpl.cap.BaublesContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;

@@ -1,6 +1,8 @@
-package com.lazy.baubles.api.cap;
+package com.lazy.baubles.apiimpl.cap;
 
 import com.lazy.baubles.api.bauble.IBauble;
+import com.lazy.baubles.api.cap.BaublesCapabilities;
+import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.event.EventHandlerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
