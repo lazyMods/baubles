@@ -103,7 +103,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.lazy'
             artifactId = 'baubles'
-            version = '1.8.3'
+            version = ${mod_version}
             from components.java
             artifact srcJar
             artifact apiJar
