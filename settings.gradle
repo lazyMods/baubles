@@ -1,2 +1,1 @@
 rootProject.name = 'baubles'
-include 'api'

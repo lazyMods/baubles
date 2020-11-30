@@ -60,6 +60,7 @@ minecraft {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
 }
 
 jar {
@@ -78,24 +79,47 @@ jar {
 
 jar.finalizedBy('reobfJar')
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
+task srcJar (type: Jar) {
+    from sourceSets.main.java
+    classifier = 'sources'
 }
 
 task apiJar(type: Jar) {
-    from(sourceSets.main.java) {
-        include "com/lazy/baubles/api/**"
-    }
+    // Sources included because of MinecraftForge/ForgeGradle#369
+    from(sourceSets.main.allJava)
+    from(sourceSets.main.output)
+    include 'com/lazy/baubles/api/**'
+
     classifier = 'api'
+}
+
+artifacts {
+    archives srcJar, apiJar
+}
+
+publishing {
+    tasks.publish.dependsOn build
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.lazy'
+            artifactId = 'baubles'
+            version = '1.8.3'
+            from components.java
+            artifact srcJar
+            artifact apiJar
+            pom.withXml {
+                def node = asNode()
+                if(node.dependencies.size() > 0)
+                    node.remove(node.dependencies) // Remove deps, as they are all mappings-dependent and/or forge
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = "file:///C:\\Users\\Utilizador\\Dropbox\\dropbox-mvn-repo"
+        }
+    }
 }
 
 task deobfJar(type: Jar) {
