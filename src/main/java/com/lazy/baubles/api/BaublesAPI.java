@@ -6,12 +6,15 @@ import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.common.Mod;
 
 /**
  * @author Azanor
  * @author lazynessmind - porter
  */
 public class BaublesAPI {
+
+    public static final String MOD_ID = "baubles";
 
     //Retrieves the baubles inventory capability handler for the supplied player
     public static LazyOptional<IBaublesItemHandler> getBaublesHandler(PlayerEntity player) {
