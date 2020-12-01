@@ -1,6 +1,6 @@
 package com.lazy.baubles.client.event;
 
-import com.lazy.baubles.Baubles;
+import com.lazy.baubles.api.BaublesAPI;
 import com.lazy.baubles.api.bauble.BaubleType;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.util.text.TextFormatting;
@@ -10,7 +10,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Baubles.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = BaublesAPI.MOD_ID, value = Dist.CLIENT)
 public class RingItemTooltip {
 
     @SubscribeEvent
@@ -19,7 +19,7 @@ public class RingItemTooltip {
             event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
                 BaubleType bt = bauble.getBaubleType();
                 TranslationTextComponent text = new TranslationTextComponent("name." + bt);
-                text.getStyle().applyFormatting(TextFormatting.GOLD); //setColor(TextFormatting)
+                text.mergeStyle(TextFormatting.GOLD);
                 event.getToolTip().add(text);
             });
         }
