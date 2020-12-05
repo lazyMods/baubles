@@ -1,7 +1,5 @@
-package com.lazy.baubles.event;
+package com.lazy.baubles.datadriven;
 
-import com.lazy.baubles.data.BaubleJsonItem;
-import com.lazy.baubles.data.json.BaubleJson;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

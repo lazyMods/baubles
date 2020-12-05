@@ -1,6 +1,7 @@
 package com.lazy.baubles.client.event;
 
 import com.lazy.baubles.Baubles;
+import com.lazy.baubles.api.BaublesAPI;
 import com.lazy.baubles.network.OpenBaublesInvPacket;
 import com.lazy.baubles.network.PacketHandler;
 import com.lazy.baubles.proxy.ClientProxy;
@@ -10,7 +11,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Baubles.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = BaublesAPI.MOD_ID, value = Dist.CLIENT)
 public class ClientPlayerTick {
 
     @SubscribeEvent

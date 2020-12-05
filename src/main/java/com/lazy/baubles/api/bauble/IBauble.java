@@ -16,7 +16,7 @@ public interface IBauble {
      * This method return the type of bauble this is.
      * Type is used to determine the slots it can go into.
      */
-    BaubleType getBaubleType();
+    BaubleType getBaubleType(ItemStack stack);
 
     /**
      * This method is called once per tick if the bauble is being worn by a player

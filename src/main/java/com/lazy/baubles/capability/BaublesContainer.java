@@ -1,4 +1,4 @@
-package com.lazy.baubles.apiimpl.cap;
+package com.lazy.baubles.capability;
 
 import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
@@ -46,7 +46,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
         if (stack.isEmpty() || !opt.isPresent())
             return false;
         IBauble bauble = opt.orElseThrow(NullPointerException::new);
-        return bauble.canEquip(holder) && bauble.getBaubleType().hasSlot(slot);
+        return bauble.canEquip(holder) && bauble.getBaubleType(stack).hasSlot(slot);
     }
 
     @Override

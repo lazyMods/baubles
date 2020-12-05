@@ -1,6 +1,7 @@
 package com.lazy.baubles.event;
 
 import com.lazy.baubles.Baubles;
+import com.lazy.baubles.api.BaublesAPI;
 import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.item.ItemStack;
@@ -16,10 +17,10 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Baubles.MODID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = BaublesAPI.MOD_ID)
 public class AttachCapability {
 
-    private static ResourceLocation cap = new ResourceLocation(Baubles.MODID, "bauble_cap");
+    private static ResourceLocation cap = new ResourceLocation(BaublesAPI.MOD_ID, "bauble_cap");
 
     @SubscribeEvent
     public static void attachCaps(AttachCapabilitiesEvent<ItemStack> event) {

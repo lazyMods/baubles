@@ -1,4 +1,4 @@
-package com.lazy.baubles.data.json;
+package com.lazy.baubles.datadriven.model;
 
 public class EffectModel {
 

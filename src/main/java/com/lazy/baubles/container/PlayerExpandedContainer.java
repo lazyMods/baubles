@@ -154,7 +154,7 @@ public class PlayerExpandedContainer extends Container {
             // inv -> bauble
             else if (itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).isPresent()) {
                 IBauble bauble = itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
-                for (int baubleSlot : bauble.getBaubleType().getValidSlots()) {
+                for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
                     if (bauble.canEquip(this.player) && !(this.inventorySlots.get(baubleSlot + 9)).getHasStack() &&
                             !this.mergeItemStack(itemstack1, baubleSlot + 9, baubleSlot + 10, false)) {
                         return ItemStack.EMPTY;

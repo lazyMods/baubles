@@ -29,7 +29,7 @@ public class BaubleCap {
 
         @Override
         public IBauble call() {
-            return () -> BaubleType.TRINKET;
+            return (itemStack) -> BaubleType.TRINKET;
         }
     }
 }

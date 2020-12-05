@@ -1,10 +1,10 @@
-package com.lazy.baubles.data.baubles;
+package com.lazy.baubles.datadriven;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.lazy.baubles.data.baubles.model.BaubleModel;
-import com.lazy.baubles.data.baubles.model.EffectModel;
+import com.lazy.baubles.datadriven.model.BaubleModel;
+import com.lazy.baubles.datadriven.model.EffectModel;
 import net.minecraft.util.JSONUtils;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -29,7 +29,11 @@ public class BaubleJson {
     public static List<BaubleModel> loadBaubles() {
         List<BaubleModel> baubles = new ArrayList<>();
         for (File file : getAllJsonBaubles()) {
-            baubles.add(read(file));
+            if (baubles.stream().noneMatch(baubleModel -> baubleModel.getRegistryName().equals(read(file).getRegistryName()))) {
+                baubles.add(read(file));
+            } else {
+                System.out.println("Bauble with " + read(file).getRegistryName() + " already exists!");
+            }
         }
         return baubles;
     }
@@ -42,19 +46,25 @@ public class BaubleJson {
             String registryName = JSONUtils.getString(json, "registryName", "");
             String type = JSONUtils.getString(json, "type", "");
             boolean glint = JSONUtils.getBoolean(json, "glint", false);
+            boolean showEffectTooltip = JSONUtils.getBoolean(json, "showEffectsTooltip", false);
             String displayName = JSONUtils.getString(json, "displayName", "Ring");
             List<String> tooltips = new ArrayList<>();
-            List<EffectModel> effects = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "potionIds"), EffectModel[].class));
+            List<String> requireMod = new ArrayList<>();
+            List<EffectModel> effects = new ArrayList<>();
 
             if (JSONUtils.hasField(json, "tooltips")) {
                 tooltips = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "tooltips"), String[].class).clone());
             }
 
-            if (JSONUtils.hasField(json, "potionIds")) {
-                effects = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "potionIds"), EffectModel[].class).clone());
+            if (JSONUtils.hasField(json, "requireMod")) {
+                requireMod = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "requireMod"), String[].class).clone());
             }
 
-            baubleModel = new BaubleModel(type, registryName, glint, displayName, tooltips, effects);
+            if (JSONUtils.hasField(json, "effects")) {
+                effects = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "effects"), EffectModel[].class).clone());
+            }
+
+            baubleModel = new BaubleModel(type, registryName, glint, showEffectTooltip, displayName, tooltips, requireMod, effects);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
