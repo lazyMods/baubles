@@ -27,7 +27,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BaubleJsonItem extends Item implements IBauble {
 
     public List<BaubleModel> model;
@@ -160,13 +159,6 @@ public class BaubleJsonItem extends Item implements IBauble {
         this.model = loadBaubles;
     }
 
-    @SubscribeEvent
-    public static void onItemRegister(RegistryEvent.Register<Item> e) {
-        if (!BaubleJson.loadBaubles().isEmpty()) {
-            e.getRegistry().register(new BaubleJsonItem(BaubleJson.loadBaubles()));
-        }
-    }
-
     public String getFromInteger(int integer) {
         switch (integer) {
             case 0:
@@ -191,5 +183,15 @@ public class BaubleJsonItem extends Item implements IBauble {
                 return "X";
         }
         return String.valueOf(integer);
+    }
+
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class Reg {
+        @SubscribeEvent
+        public static void onItemRegister(RegistryEvent.Register<Item> e) {
+            if (!BaubleJson.loadBaubles().isEmpty()) {
+                e.getRegistry().register(new BaubleJsonItem(BaubleJson.loadBaubles()));
+            }
+        }
     }
 }
