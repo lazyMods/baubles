@@ -1,12 +1,11 @@
 package com.lazy.baubles.event;
 
-import com.lazy.baubles.Baubles;
 import com.lazy.baubles.api.BaublesAPI;
 import com.lazy.baubles.api.bauble.IBauble;
 import com.lazy.baubles.api.cap.BaublesCapabilities;
+import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.capability.BaublesContainer;
 import com.lazy.baubles.capability.BaublesContainerProvider;
-import com.lazy.baubles.api.cap.IBaublesItemHandler;
 import com.lazy.baubles.network.PacketHandler;
 import com.lazy.baubles.network.SyncPacket;
 import net.minecraft.entity.Entity;
