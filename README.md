@@ -32,7 +32,7 @@
 
 Mod API originally created by **@Azanor** that adds 7 slots to the player inventory.
 
-You can learn how to use the API [here](https://github.com/lazyMods/Baubles/wiki/Intro).
+You can learn how to use the API [here](lazynessmind.github.io).
 
 For any questions DM me on twitter: *@_nesslazy*
 
