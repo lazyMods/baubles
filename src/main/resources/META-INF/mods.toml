@@ -4,7 +4,7 @@ license="ANS3.0NC" #mandatory
 issueTrackerURL="https://github.com/lazyMods/Baubles/issues" #optional
 [[mods]] #mandatory
 modId="baubles" #mandatory
-version="1.8.3" #mandatory
+version="1.8.4" #mandatory
 displayName="Baubles" #mandatory
 logoFile="BLogo.png" #optional
 credits="Azanor" #optional
