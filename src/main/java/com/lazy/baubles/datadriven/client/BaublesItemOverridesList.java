@@ -11,6 +11,8 @@ public class BaublesItemOverridesList extends ItemOverrideList {
 
     @Override
     public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, ClientWorld world, LivingEntity livingEntity) {
-        return new BaublesItemFinalModel(model, ((IBauble) stack.getItem()).getBaubleType(stack));
+        if (stack.getItem() instanceof IBauble)
+            return new BaublesItemFinalModel(model, ((IBauble) stack.getItem()).getBaubleType(stack));
+        else return model;
     }
 }
