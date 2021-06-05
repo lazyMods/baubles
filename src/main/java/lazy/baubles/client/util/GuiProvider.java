@@ -20,6 +20,6 @@ public class GuiProvider implements INamedContainerProvider {
     @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        return new PlayerExpandedContainer(id, playerInventory, !playerEntity.world.isRemote);
+        return new PlayerExpandedContainer(id, playerInventory, !playerEntity.level.isClientSide);
     }
 }

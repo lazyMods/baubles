@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 public class BaublesItemOverridesList extends ItemOverrideList {
 
     @Override
-    public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, ClientWorld world, LivingEntity livingEntity) {
+    public IBakedModel resolve(IBakedModel model, ItemStack stack, ClientWorld world, LivingEntity livingEntity) {
         if (stack.getItem() instanceof IBauble)
             return new BaublesItemFinalModel(model, ((IBauble) stack.getItem()).getBaubleType(stack));
         else return model;

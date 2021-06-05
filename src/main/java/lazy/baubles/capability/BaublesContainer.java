@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
+import org.antlr.v4.runtime.atn.SemanticContext;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -95,9 +96,9 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
         for (byte i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
             boolean autosync = stack.getCapability(BaublesCapabilities.ITEM_BAUBLE).map(b -> b.willAutoSync(holder)).orElse(false);
-            if (changed[i] || autosync && !ItemStack.areItemStacksEqual(stack, previous[i])) {
+            if (changed[i] || autosync && !ItemStack.isSame(stack, previous[i])) {
                 if (receivers == null) {
-                    receivers = new ArrayList<>(((ServerWorld) holder.world).getPlayers());
+                    receivers = new ArrayList<>(((ServerWorld) holder.level).getPlayers((serverPlayerEntity)-> true));
                     receivers.add((ServerPlayerEntity) holder);
                 }
                 EventHandlerEntity.syncSlot((ServerPlayerEntity) holder, i, stack, receivers);

@@ -21,8 +21,8 @@ public class OpenNormalInvPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity playerEntity = ctx.get().getSender();
             if (playerEntity != null) {
-                playerEntity.openContainer.onContainerClosed(playerEntity);
-                playerEntity.openContainer = playerEntity.container;
+                playerEntity.containerMenu.removed(playerEntity);
+                playerEntity.containerMenu = playerEntity.inventoryMenu;
             }
         });
         ctx.get().setPacketHandled(true);

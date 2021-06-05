@@ -16,13 +16,13 @@ public class OffHandSlot extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
-        return super.isItemValid(stack);
+    public boolean mayPlace(ItemStack stack) {
+        return super.mayPlace(stack);
     }
 
     @Nullable
     @Override
-    public Pair<ResourceLocation, ResourceLocation> getBackground() { //getSlotTexture
-        return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
+    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() { //getSlotTexture
+        return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
     }
 }

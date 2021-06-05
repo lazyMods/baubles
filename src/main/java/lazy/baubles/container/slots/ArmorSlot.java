@@ -25,24 +25,24 @@ public class ArmorSlot extends Slot {
     }
 
     @Override
-    public int getSlotStackLimit() {
+    public int getMaxStackSize() {
         return 1;
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
         return stack.canEquip(this.slotType, this.playerEntity);
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity playerIn) {
-        ItemStack itemstack = this.getStack();
-        return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.canTakeStack(playerIn);
+    public boolean mayPickup(PlayerEntity playerIn) {
+        ItemStack itemstack = this.getItem();
+        return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.mayPickup(playerIn);
     }
 
     @Nullable
     @Override
-    public Pair<ResourceLocation, ResourceLocation> getBackground() { //getSlotTexture
-        return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()]);
+    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() { //getSlotTexture
+        return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()]);
     }
 }

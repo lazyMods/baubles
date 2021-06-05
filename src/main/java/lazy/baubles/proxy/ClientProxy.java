@@ -32,7 +32,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void setupClient(FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(Baubles.Registration.PLAYER_BAUBLES, PlayerExpandedScreen::new);
+        ScreenManager.register(Baubles.Registration.PLAYER_BAUBLES, PlayerExpandedScreen::new);
         ClientRegistry.registerKeyBinding(KEY_BAUBLES);
     }
 
@@ -41,7 +41,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void addLayers() {
-        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getRenderManager().getSkinMap();
+        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
         PlayerRenderer render;
         render = skinMap.get("default");
         render.addLayer(new BaublesRenderLayer(render));

@@ -38,33 +38,33 @@ public class BaublesButton extends AbstractButton {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
         if(!Minecraft.getInstance().player.isCreative()){
             if (this.visible) {
-                FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
-                Minecraft.getInstance().getTextureManager().bindTexture(PlayerExpandedScreen.background);
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                Minecraft.getInstance().getTextureManager().bindTexture(PlayerExpandedScreen.background);
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                FontRenderer fontrenderer = Minecraft.getInstance().font;
+                Minecraft.getInstance().getTextureManager().bind(PlayerExpandedScreen.background);
+                GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                Minecraft.getInstance().getTextureManager().bind(PlayerExpandedScreen.background);
+                GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 this.isHovered = mouseX >= x && mouseY >= this.y && mouseX < x + this.width && mouseY < this.y + this.height;
-                GlStateManager.enableBlend();
-                GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-                GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-                GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GlStateManager._enableBlend();
+                GlStateManager._blendFuncSeparate(770, 771, 1, 0);
+                GlStateManager._blendFuncSeparate(770, 771, 1, 0);
+                GlStateManager._blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-                GlStateManager.pushMatrix();
-                GlStateManager.translatef(0, 0, 200);
-                GlStateManager.translatef(0, 0, 200);
+                GlStateManager._pushMatrix();
+                GlStateManager._translatef(0, 0, 200);
+                GlStateManager._translatef(0, 0, 200);
                 if (!isHovered) {
                     this.blit(matrixStack, x, this.y, 200, 48, 10, 10); //blit
                 } else {
                     this.blit(matrixStack, x, this.y, 210, 48, 10, 10); //blit
-                    fontrenderer.drawString(matrixStack, new TranslationTextComponent("button.displayText").getString(), x + 5, this.y + this.height, 0xffffff); //drawCenteredString
+                    fontrenderer.draw(matrixStack, new TranslationTextComponent("button.displayText").getString(), x + 5, this.y + this.height, 0xffffff); //drawCenteredString
                 }
-                GlStateManager.popMatrix();
+                GlStateManager._popMatrix();
             }
         }
     }
 
     public void displayNormalInventory() {
         InventoryScreen gui = new InventoryScreen(Minecraft.getInstance().player);
-        Minecraft.getInstance().displayGuiScreen(gui);
+        Minecraft.getInstance().setScreen(gui);
     }
 }

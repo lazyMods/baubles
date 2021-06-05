@@ -16,7 +16,7 @@ public class ClientPlayerTick {
     @SubscribeEvent
     public static void playerTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            if (ClientProxy.KEY_BAUBLES.isPressed() && Minecraft.getInstance().isGameFocused()) {
+            if (ClientProxy.KEY_BAUBLES.consumeClick() && Minecraft.getInstance().isWindowActive()) {
                 PacketHandler.INSTANCE.sendToServer(new OpenBaublesInvPacket());
             }
         }

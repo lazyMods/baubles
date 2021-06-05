@@ -1,9 +1,9 @@
 package lazy.baubles.client.gui;
 
-import lazy.baubles.container.PlayerExpandedContainer;
-import lazy.baubles.proxy.ClientProxy;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import lazy.baubles.container.PlayerExpandedContainer;
+import lazy.baubles.proxy.ClientProxy;
 import net.minecraft.client.gui.DisplayEffectsScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.util.InputMappings;
@@ -26,22 +26,23 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
 
     @Override
     public void tick() { //tick
-        this.container.baubles.setEventBlock(false);
-        this.updateActivePotionEffects();
+        this.menu.baubles.setEventBlock(false);
+        this.checkEffectRendering();
         this.resetGuiLeft();
     }
 
     @Override
-    protected void init() { //init
-        this.buttons.clear(); //this.buttons
+    protected void init() {
+        this.buttons.clear();
         super.init();
         this.resetGuiLeft();
     }
 
+
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int p_146979_1_, int p_146979_2_) { //drawGuiContainerForegroundLayer
-        if (this.minecraft != null) { //this.minecraft
-            this.minecraft.fontRenderer.func_243248_b(matrixStack, new TranslationTextComponent("container.crafting"), 115, 8, 4210752);
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+        if (this.minecraft != null) {
+            this.minecraft.font.draw(matrixStack, new TranslationTextComponent("container.crafting"), 115, 8, 4210752);
         }
     }
 
@@ -49,34 +50,34 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
         this.renderBackground(matrixStack); //renderBackground
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //renderHoveredToolTip
+        this.renderTooltip(matrixStack, mouseX, mouseY); //renderHoveredToolTip
         this.oldMouseX = (float) mouseX;
         this.oldMouseY = (float) mouseY;
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) { //drawGuiContainerBackgroundLayer
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (this.minecraft != null) {
-            this.minecraft.getTextureManager().bindTexture(background);
-            int k = this.guiLeft;
-            int l = this.guiTop;
-            this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize);  //blit
-            for (int i1 = 0; i1 < this.container.inventorySlots.size(); ++i1) {
-                Slot slot = this.container.inventorySlots.get(i1);
-                if (slot.getHasStack() && slot.getSlotStackLimit() == 1) {
-                    this.blit(matrixStack, k + slot.xPos, l + slot.yPos, 200, 0, 16, 16);
+            this.minecraft.getTextureManager().bind(background);
+            int k = this.leftPos;
+            int l = this.topPos;
+            this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
+            for (int i1 = 0; i1 < this.menu.slots.size(); ++i1) {
+                Slot slot = this.menu.slots.get(i1);
+                if (slot.hasItem() && slot.getMaxStackSize() == 1) {
+                    this.blit(matrixStack, k + slot.x, l + slot.y, 200, 0, 16, 16);
                 }
             }
-            InventoryScreen.drawEntityOnScreen(k + 51, l + 75, 30, (float) (k + 51) - this.oldMouseX, (float) (l + 75 - 50) - this.oldMouseY, this.minecraft.player);
+            InventoryScreen.renderEntityInInventory(k + 51, l + 75, 30, (float) (k + 51) - this.oldMouseX, (float) (l + 75 - 50) - this.oldMouseY, this.minecraft.player);
         }
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int what) { //keyPressed
-        if (ClientProxy.KEY_BAUBLES.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) {
+    public boolean keyPressed(int keyCode, int scanCode, int what) {
+        if (ClientProxy.KEY_BAUBLES.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode))) {
             if (this.minecraft != null) {
-                this.minecraft.player.closeScreen();
+                this.minecraft.player.closeContainer();
             }
             return true;
         } else {
@@ -85,6 +86,6 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
     }
 
     private void resetGuiLeft() {
-        this.guiLeft = (this.width - this.xSize) / 2; //width
+        this.leftPos = (this.width - this.imageWidth) / 2;
     }
 }

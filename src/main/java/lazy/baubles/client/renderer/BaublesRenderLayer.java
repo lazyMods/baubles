@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+@SuppressWarnings("ConstantConditions")
 public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>> extends LayerRenderer<T, M> {
 
     public BaublesRenderLayer(IEntityRenderer<T, M> entityRendererIn) {
@@ -27,16 +28,17 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
 */
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(inv -> {
             dispatchRenders(inv, player, IRenderBauble.RenderType.BODY, partialTicks);
-            float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
-            float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
-            float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
 
-            GlStateManager.pushMatrix();
-            GlStateManager.rotatef(yawOffset, 0, -1, 0);
-            GlStateManager.rotatef(yaw - 270, 0, 1, 0);
-            GlStateManager.rotatef(pitch, 0, 0, 1);
+            float yaw = player.yHeadRotO + (player.yHeadRot - player.yHeadRotO) * partialTicks;
+            float yawOffset = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO) * partialTicks;
+            float pitch = player.xRotO + (player.xRot - player.xRotO) * partialTicks;
+
+            GlStateManager._pushMatrix();
+            GlStateManager._rotatef(yawOffset, 0, -1, 0);
+            GlStateManager._rotatef(yaw - 270, 0, 1, 0);
+            GlStateManager._rotatef(pitch, 0, 0, 1);
             dispatchRenders(inv, player, IRenderBauble.RenderType.HEAD, partialTicks);
-            GlStateManager.popMatrix();
+            GlStateManager._popMatrix();
         });
     }
 
@@ -46,11 +48,11 @@ public class BaublesRenderLayer<T extends PlayerEntity, M extends PlayerModel<T>
             if (!stack.isEmpty()) {
                 stack.getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
                     if (bauble instanceof IRenderBauble) {
-                        GlStateManager.pushMatrix();
+                        GlStateManager._pushMatrix();
                         GL11.glColor3ub((byte) 255, (byte) 255, (byte) 255);
-                        GlStateManager.color4f(1F, 1F, 1F, 1F);
+                        GlStateManager._color4f(1F, 1F, 1F, 1F);
                         ((IRenderBauble) bauble).onPlayerBaubleRender(player, type, partialTicks);
-                        GlStateManager.popMatrix();
+                        GlStateManager._popMatrix();
                     }
                 });
             }

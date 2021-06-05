@@ -15,7 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.data.IModelData;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -50,7 +52,7 @@ public class BaublesItemFinalModel implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand) {
-        TextureAtlasSprite baubleSprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(this.getFromType(this.type));
+        TextureAtlasSprite baubleSprite = Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(this.getFromType(this.type));
 
         if (side != null) return this.givenModel.getQuads(state, side, rand);
 
@@ -60,8 +62,8 @@ public class BaublesItemFinalModel implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
-        return this.givenModel.isAmbientOcclusion();
+    public boolean useAmbientOcclusion() {
+        return this.givenModel.useAmbientOcclusion();
     }
 
     @Override
@@ -69,24 +71,29 @@ public class BaublesItemFinalModel implements IBakedModel {
         return this.givenModel.isGui3d();
     }
 
+
+
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
-    @Override
-    public boolean isBuiltInRenderer() {
-        return this.givenModel.isBuiltInRenderer();
-    }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return this.givenModel.getItemCameraTransforms();
+    public boolean isCustomRenderer() {
+        return this.givenModel.isCustomRenderer();
     }
 
+
     @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return ModelLoader.instance().getSpriteMap().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(new ResourceLocation("minecraft:diamond_block"));
+    public ItemCameraTransforms getTransforms() {
+        return this.givenModel.getTransforms();
+    }
+
+
+    @Override
+    public TextureAtlasSprite getParticleIcon() {
+        return ModelLoader.instance().getSpriteMap().getAtlas(AtlasTexture.LOCATION_BLOCKS).getSprite(new ResourceLocation("minecraft:diamond_block"));
     }
 
     @Override
