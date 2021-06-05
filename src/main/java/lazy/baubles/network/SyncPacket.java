@@ -2,6 +2,7 @@ package lazy.baubles.network;
 
 import lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,13 +35,14 @@ public class SyncPacket {
         buf.writeItemStack(this.bauble);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            Entity p = Minecraft.getInstance().world.getEntityByID(playerId);
+            ClientWorld world = Minecraft.getInstance().world;
+            if (world == null) return;
+            Entity p = world.getEntityByID(playerId);
             if (p instanceof PlayerEntity) {
-                p.getCapability(BaublesCapabilities.BAUBLES).ifPresent(b -> {
-                    b.setStackInSlot(slot, bauble);
-                });
+                p.getCapability(BaublesCapabilities.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
             }
         });
         ctx.get().setPacketHandled(true);
