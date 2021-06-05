@@ -75,79 +75,84 @@ public class PlayerExpandedContainer extends Container {
         this.addSlot(new OffHandSlot(playerInventory, 40, 96, 62));
     }
 
+
+
     @Override
-    public void onCraftMatrixChanged(IInventory par1IInventory) {
+    public void slotsChanged(IInventory par1IInventory) {
         try {
             Method onCraftChange = ObfuscationReflectionHelper.findMethod(WorkbenchContainer.class, "func_217066_a", int.class, World.class, PlayerEntity.class, CraftingInventory.class, CraftResultInventory.class);
-            onCraftChange.invoke(null, this.windowId, this.player.world, this.player, this.craftMatrix, this.craftResult);
+            onCraftChange.invoke(null, this.containerId, this.player.level, this.player, this.craftMatrix, this.craftResult);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onContainerClosed(PlayerEntity player) {
-        super.onContainerClosed(player);
-        this.craftResult.clear();
 
-        if (!player.world.isRemote) {
-            this.clearContainer(player, player.world, this.craftMatrix);
+
+    @Override
+    public void removed(PlayerEntity player) {
+        super.removed(player);
+        this.craftResult.clearContent();
+
+        if (!player.level.isClientSide) {
+            this.clearContainer(player, player.level, this.craftMatrix);
         }
     }
 
+    
     @Override
-    public boolean canInteractWith(PlayerEntity par1PlayerEntity) {
+    public boolean stillValid(PlayerEntity par1PlayerEntity) {
         return true;
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            EquipmentSlotType entityequipmentslot = MobEntity.getSlotForItemStack(itemstack);
+            EquipmentSlotType entityequipmentslot = MobEntity.getEquipmentSlotForItem(itemstack);
 
             int slotShift = baubles.getSlots();
 
             if (index == 0) {
-                if (!this.mergeItemStack(itemstack1, 9 + slotShift, 45 + slotShift, true)) {
+                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else if (index >= 1 && index < 5) {
-                if (!this.mergeItemStack(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= 5 && index < 9) {
-                if (!this.mergeItemStack(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // baubles -> inv
             else if (index >= 9 && index < 9 + slotShift) {
-                if (!this.mergeItemStack(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // inv -> armor
-            else if (entityequipmentslot.getSlotType() == EquipmentSlotType.Group.ARMOR && !(this.inventorySlots.get(8 - entityequipmentslot.getIndex())).getHasStack()) {
+            else if (entityequipmentslot.getType() == EquipmentSlotType.Group.ARMOR && !(this.slots.get(8 - entityequipmentslot.getIndex())).hasItem()) {
                 int i = 8 - entityequipmentslot.getIndex();
 
-                if (!this.mergeItemStack(itemstack1, i, i + 1, false)) {
+                if (!this.moveItemStackTo(itemstack1, i, i + 1, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // inv -> offhand
-            else if (entityequipmentslot == EquipmentSlotType.OFFHAND && !(this.inventorySlots.get(45 + slotShift)).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 45 + slotShift, 46 + slotShift, false)) {
+            else if (entityequipmentslot == EquipmentSlotType.OFFHAND && !(this.slots.get(45 + slotShift)).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 45 + slotShift, 46 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -155,28 +160,28 @@ public class PlayerExpandedContainer extends Container {
             else if (itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).isPresent()) {
                 IBauble bauble = itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
                 for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
-                    if (bauble.canEquip(this.player) && !(this.inventorySlots.get(baubleSlot + 9)).getHasStack() &&
-                            !this.mergeItemStack(itemstack1, baubleSlot + 9, baubleSlot + 10, false)) {
+                    if (bauble.canEquip(this.player) && !(this.slots.get(baubleSlot + 9)).hasItem() &&
+                            !this.moveItemStackTo(itemstack1, baubleSlot + 9, baubleSlot + 10, false)) {
                         return ItemStack.EMPTY;
                     }
                     if (itemstack1.getCount() == 0) break;
                 }
             } else if (index >= 9 + slotShift && index < 36 + slotShift) {
-                if (!this.mergeItemStack(itemstack1, 36 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(itemstack1, 36 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= 36 + slotShift && index < 45 + slotShift) {
-                if (!this.mergeItemStack(itemstack1, 9 + slotShift, 36 + slotShift, false)) {
+                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 36 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -191,16 +196,18 @@ public class PlayerExpandedContainer extends Container {
             ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
 
             if (index == 0) {
-                playerIn.dropItem(itemstack2, false);
+                playerIn.drop(itemstack2, false);
             }
         }
 
         return itemstack;
     }
 
+
+
     @Override
-    public boolean canMergeSlot(ItemStack stack, Slot slot) {
-        return slot.inventory != this.craftResult && super.canMergeSlot(stack, slot);
+    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
+        return slot.container != this.craftResult && super.canTakeItemForPickAll(stack, slot);
     }
 
     private void addBaubleSlots() {

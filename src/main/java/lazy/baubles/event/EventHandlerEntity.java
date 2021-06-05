@@ -81,7 +81,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
-        ItemStack itemstack = event.getPlayer().getHeldItem(event.getHand());
+        ItemStack itemstack = event.getPlayer().getItemInHand(event.getHand());
 
         if (itemstack.getItem() instanceof IBauble) {
             IBauble bauble = (IBauble) itemstack.getItem();
@@ -115,7 +115,7 @@ public class EventHandlerEntity {
     }
 
     public static void syncSlot(PlayerEntity player, byte slot, ItemStack stack, Collection<? extends PlayerEntity> receivers) {
-        SyncPacket pkt = new SyncPacket(player.getEntityId(), slot, stack);
+        SyncPacket pkt = new SyncPacket(player.getId(), slot, stack);
         for (PlayerEntity receiver : receivers) {
             PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) receiver), pkt);
         }
@@ -123,7 +123,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public static void playerDeath(LivingDropsEvent event) {
-        if (event.getEntity() instanceof PlayerEntity && !event.getEntity().world.isRemote && !event.getEntity().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        if (event.getEntity() instanceof PlayerEntity && !event.getEntity().level.isClientSide && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
             dropItemsAt((PlayerEntity) event.getEntity(), event.getDrops());
         }
     }
@@ -132,8 +132,8 @@ public class EventHandlerEntity {
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
             for (int i = 0; i < baubles.getSlots(); ++i) {
                 if (!baubles.getStackInSlot(i).isEmpty()) {
-                    ItemEntity ei = new ItemEntity(player.world, player.getPosX(), player.getPosY() + player.getEyeHeight(), player.getPosZ(), baubles.getStackInSlot(i).copy());
-                    ei.setPickupDelay(40);
+                    ItemEntity ei = new ItemEntity(player.level, player.getX(), player.getY() + player.getEyeHeight(), player.getZ(), baubles.getStackInSlot(i).copy());
+                    ei.setPickUpDelay(40);
                     drops.add(ei);
                     baubles.setStackInSlot(i, ItemStack.EMPTY);
                 }

@@ -42,26 +42,26 @@ public class BaubleJson {
     public static BaubleModel read(File file) {
         BaubleModel baubleModel = null;
         try {
-            JsonObject json = JSONUtils.fromJson(new FileReader(file));
-            String registryName = JSONUtils.getString(json, "registryName", "");
-            String type = JSONUtils.getString(json, "type", "");
-            boolean glint = JSONUtils.getBoolean(json, "glint", false);
-            boolean showEffectTooltip = JSONUtils.getBoolean(json, "showEffectsTooltip", false);
-            String displayName = JSONUtils.getString(json, "displayName", "Ring");
+            JsonObject json = JSONUtils.parse(new FileReader(file));
+            String registryName = JSONUtils.getAsString(json, "registryName", "");
+            String type = JSONUtils.getAsString(json, "type", "");
+            boolean glint = JSONUtils.getAsBoolean(json, "glint", false);
+            boolean showEffectTooltip = JSONUtils.getAsBoolean(json, "showEffectsTooltip", false);
+            String displayName = JSONUtils.getAsString(json, "displayName", "Ring");
             List<String> tooltips = new ArrayList<>();
             List<String> requireMod = new ArrayList<>();
             List<EffectModel> effects = new ArrayList<>();
 
-            if (JSONUtils.hasField(json, "tooltips")) {
-                tooltips = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "tooltips"), String[].class).clone());
+            if (JSONUtils.isValidNode(json, "tooltips")) {
+                tooltips = Arrays.asList(GSON.fromJson(JSONUtils.getAsJsonArray(json, "tooltips"), String[].class).clone());
             }
 
-            if (JSONUtils.hasField(json, "requireMod")) {
-                requireMod = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "requireMod"), String[].class).clone());
+            if (JSONUtils.isValidNode(json, "requireMod")) {
+                requireMod = Arrays.asList(GSON.fromJson(JSONUtils.getAsJsonArray(json, "requireMod"), String[].class).clone());
             }
 
-            if (JSONUtils.hasField(json, "effects")) {
-                effects = Arrays.asList(GSON.fromJson(JSONUtils.getJsonArray(json, "effects"), EffectModel[].class).clone());
+            if (JSONUtils.isValidNode(json, "effects")) {
+                effects = Arrays.asList(GSON.fromJson(JSONUtils.getAsJsonArray(json, "effects"), EffectModel[].class).clone());
             }
 
             baubleModel = new BaubleModel(type, registryName, glint, showEffectTooltip, displayName, tooltips, requireMod, effects);

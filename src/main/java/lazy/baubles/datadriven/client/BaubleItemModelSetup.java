@@ -22,7 +22,7 @@ public class BaubleItemModelSetup {
 
     @SubscribeEvent
     public static void onTextureStitching(TextureStitchEvent.Pre e) {
-        if (!e.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) return;
+        if (!e.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) return;
         e.addSprite(new ResourceLocation(BaublesAPI.MOD_ID, "item/ring"));
         e.addSprite(new ResourceLocation(BaublesAPI.MOD_ID, "item/amulet"));
         e.addSprite(new ResourceLocation(BaublesAPI.MOD_ID, "item/charm"));

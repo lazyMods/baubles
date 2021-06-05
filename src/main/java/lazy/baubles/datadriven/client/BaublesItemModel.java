@@ -42,8 +42,8 @@ public class BaublesItemModel implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
-        return this.givenModel.isAmbientOcclusion();
+    public boolean useAmbientOcclusion() {
+        return this.givenModel.useAmbientOcclusion();
     }
 
     @Override
@@ -52,17 +52,17 @@ public class BaublesItemModel implements IBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
-        return this.givenModel.isSideLit();
+    public boolean usesBlockLight() {
+        return this.givenModel.usesBlockLight();
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
-        return this.givenModel.isBuiltInRenderer();
+    public boolean isCustomRenderer() {
+        return this.givenModel.isCustomRenderer();
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
         return null;
     }
 

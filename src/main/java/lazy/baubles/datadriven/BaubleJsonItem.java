@@ -32,20 +32,15 @@ public class BaubleJsonItem extends Item implements IBauble {
     public List<BaubleModel> model;
 
     public BaubleJsonItem(List<BaubleModel> model) {
-        super(new Item.Properties().group(ItemGroup.TOOLS));
+        super(new Item.Properties().tab(ItemGroup.TAB_TOOLS));
         this.setRegistryName("bauble");
         this.model = model;
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
-    }
-
-    @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        super.fillItemGroup(group, items);
-        if (group != getGroup()) return;
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        super.fillItemCategory(group, items);
+        if (group != getItemCategory()) return;
         model.forEach(model -> {
             for (String modId : model.getRequiredMods()) {
                 if (!ModList.get().isLoaded(modId)) return;
@@ -57,9 +52,11 @@ public class BaubleJsonItem extends Item implements IBauble {
         });
     }
 
+
+
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.getTag() != null) {
             model.forEach(model -> {
                 if (this.isRing(stack, model.getRegistryName())) {
@@ -71,7 +68,7 @@ public class BaubleJsonItem extends Item implements IBauble {
                             Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
                             if (effect != null) {
                                 StringTextComponent effectName = new StringTextComponent("");
-                                effectName.appendString(effect.getDisplayName().getString() + " " + getFromInteger(Math.min(effectModel.getEffectLevel(), 99)));
+                                effectName.append(effect.getDisplayName().getString() + " " + getFromInteger(Math.min(effectModel.getEffectLevel(), 99)));
                                 tooltip.add(effectName);
                             }
                         });
@@ -81,8 +78,10 @@ public class BaubleJsonItem extends Item implements IBauble {
         }
     }
 
+
+
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         AtomicBoolean has = new AtomicBoolean(false);
         if (stack.getTag() != null) {
             model.forEach(model -> {
@@ -95,16 +94,16 @@ public class BaubleJsonItem extends Item implements IBauble {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         StringTextComponent textComponent = new StringTextComponent("");
         if (stack.getTag() != null) {
             model.forEach(model -> {
                 if (this.isRing(stack, model.getRegistryName())) {
-                    textComponent.appendString(model.getDisplayName());
+                    textComponent.append(model.getDisplayName());
                 }
             });
         }
-        return textComponent.getString().equals("") ? super.getDisplayName(stack) : textComponent;
+        return textComponent.getString().equals("") ? super.getName(stack) : textComponent;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class BaubleJsonItem extends Item implements IBauble {
                         if (ForgeRegistries.POTIONS.containsKey(new ResourceLocation(effectModel.getEffectRegistryName()))) {
                             Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
                             if (effect != null)
-                                player.addPotionEffect(new EffectInstance(effect, 999999, Math.min(effectModel.getEffectLevel(), 99)));
+                                player.addEffect(new EffectInstance(effect, 999999, Math.min(effectModel.getEffectLevel(), 99)));
                         }
                     }
                 }
@@ -144,7 +143,7 @@ public class BaubleJsonItem extends Item implements IBauble {
                 if (this.isRing(stack, model.getRegistryName())) {
                     for (EffectModel effectModel : model.getEffects()) {
                         Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
-                        if (effect != null) player.removeActivePotionEffect(effect);
+                        if (effect != null) player.removeEffect(effect);
                     }
                 }
             });

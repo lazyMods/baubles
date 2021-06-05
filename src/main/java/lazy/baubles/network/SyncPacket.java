@@ -20,7 +20,7 @@ public class SyncPacket {
     public SyncPacket(PacketBuffer buf) {
         this.playerId = buf.readInt();
         this.slot = buf.readByte();
-        this.bauble = buf.readItemStack();
+        this.bauble = buf.readItem();
     }
 
     public SyncPacket(int playerId, byte slot, ItemStack bauble) {
@@ -32,15 +32,15 @@ public class SyncPacket {
     public void toBytes(PacketBuffer buf) {
         buf.writeInt(this.playerId);
         buf.writeByte(this.slot);
-        buf.writeItemStack(this.bauble);
+        buf.writeItem(this.bauble);
     }
 
     @SuppressWarnings("ConstantConditions")
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ClientWorld world = Minecraft.getInstance().world;
+            ClientWorld world = Minecraft.getInstance().level;
             if (world == null) return;
-            Entity p = world.getEntityByID(playerId);
+            Entity p = world.getEntity(playerId);
             if (p instanceof PlayerEntity) {
                 p.getCapability(BaublesCapabilities.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
             }

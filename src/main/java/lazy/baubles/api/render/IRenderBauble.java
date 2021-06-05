@@ -32,7 +32,7 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}.
          */
         public static void rotateIfSneaking(PlayerEntity player) {
-            if (player.isSneaking())
+            if (player.isCrouching())
                 applySneakingRotation();
         }
 
@@ -41,8 +41,8 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}.
          */
         public static void applySneakingRotation() {
-            GlStateManager.translatef(0F, 0.2F, 0F);
-            GlStateManager.rotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
+            GlStateManager._translatef(0F, 0.2F, 0F);
+            GlStateManager._rotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
         }
 
         /**
@@ -50,9 +50,9 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#HEAD}.
          */
         public static void translateToHeadLevel(PlayerEntity player) {
-            GlStateManager.translatef(0, -player.getEyeHeight(), 0);
-            if (player.isSneaking())
-                GlStateManager.translatef(0.25F * MathHelper.sin(player.rotationPitch * (float) Math.PI / 180), 0.25F * MathHelper.cos(player.rotationPitch * (float) Math.PI / 180), 0F);
+            GlStateManager._translatef(0, -player.getEyeHeight(), 0);
+            if (player.isCrouching())
+                GlStateManager._translatef(0.25F * MathHelper.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * MathHelper.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
         }
 
         /**
@@ -60,9 +60,9 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#HEAD}, and usually after calling {@link Helper#translateToHeadLevel(PlayerEntity)}.
          */
         public static void translateToFace() {
-            GlStateManager.rotatef(90F, 0F, 1F, 0F);
-            GlStateManager.rotatef(180F, 1F, 0F, 0F);
-            GlStateManager.translatef(0f, -4.35f, -1.27f);
+            GlStateManager._rotatef(90F, 0F, 1F, 0F);
+            GlStateManager._rotatef(180F, 1F, 0F, 0F);
+            GlStateManager._translatef(0f, -4.35f, -1.27f);
         }
 
         /**
@@ -70,8 +70,8 @@ public interface IRenderBauble extends IBauble {
          * Use for any render.
          */
         public static void defaultTransforms() {
-            GlStateManager.translatef(0.0f, 3.0f, 1.0f);
-            GlStateManager.scalef(0.55f, 0.55f, 0.55f);
+            GlStateManager._translatef(0.0f, 3.0f, 1.0f);
+            GlStateManager._scalef(0.55f, 0.55f, 0.55f);
         }
 
         /**
@@ -79,8 +79,8 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}, and usually after calling {@link Helper#rotateIfSneaking(PlayerEntity)}.
          */
         public static void translateToChest() {
-            GlStateManager.rotatef(180F, 1F, 0F, 0F);
-            GlStateManager.translatef(0F, -3.2F, -0.85F);
+            GlStateManager._rotatef(180F, 1F, 0F, 0F);
+            GlStateManager._translatef(0F, -3.2F, -0.85F);
         }
     }
 

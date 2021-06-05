@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = BaublesAPI.MOD_ID, value = Dist.CLIENT)
 public class RingItemTooltip {
 
+    @SuppressWarnings("ConstantConditions")
     @SubscribeEvent
     public static void tooltipEvent(ItemTooltipEvent event) {
         if (!event.getItemStack().isEmpty()) {
@@ -20,7 +21,7 @@ public class RingItemTooltip {
                 event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
                     BaubleType bt = bauble.getBaubleType(event.getItemStack());
                     TranslationTextComponent text = new TranslationTextComponent("name." + bt);
-                    text.mergeStyle(TextFormatting.GOLD);
+                    text.withStyle(TextFormatting.GOLD);
                     event.getToolTip().add(text);
                 });
             }
