@@ -1,6 +1,7 @@
 package lazy.baubles.network;
 
 import lazy.baubles.client.util.GuiProvider;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -15,13 +16,15 @@ public class OpenBaublesInvPacket {
     public OpenBaublesInvPacket() {
     }
 
-    public void toBytes(PacketBuffer buf) {
-    }
+    public void toBytes(PacketBuffer buf) {}
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ctx.get().getSender().closeContainer();
-            NetworkHooks.openGui(ctx.get().getSender(), new GuiProvider());
+            ServerPlayerEntity playerEntity = ctx.get().getSender();
+            if (playerEntity != null) {
+                playerEntity.closeContainer();
+                NetworkHooks.openGui(playerEntity, new GuiProvider());
+            }
         });
         ctx.get().setPacketHandled(true);
     }
