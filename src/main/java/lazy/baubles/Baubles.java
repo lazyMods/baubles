@@ -1,51 +1,48 @@
 package lazy.baubles;
 
 import lazy.baubles.api.BaublesAPI;
-import lazy.baubles.container.PlayerExpandedContainer;
-import lazy.baubles.proxy.ClientProxy;
-import lazy.baubles.proxy.CommonProxy;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
+import lazy.baubles.api.cap.CapabilityBaubles;
+import lazy.baubles.client.gui.PlayerExpandedScreen;
+import lazy.baubles.network.PacketHandler;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmllegacy.network.IContainerFactory;
-import net.minecraftforge.registries.ObjectHolder;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
+import org.lwjgl.glfw.GLFW;
 
 @Mod(BaublesAPI.MOD_ID)
 public class Baubles {
 
-    public static CommonProxy proxy;
+    public static final KeyMapping KEY_BAUBLES = new KeyMapping("keybind.baublesinventory", GLFW.GLFW_KEY_B, "key.categories.inventory");
 
     public Baubles() {
-        proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-        proxy.init();
+        ModMenus.init();
+        MinecraftForge.EVENT_BUS.addListener(this::setupCommon);
+        MinecraftForge.EVENT_BUS.addListener(this::setupClient);
     }
 
-    @Mod.EventBusSubscriber(modid = BaublesAPI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class Registration {
+    private void setupCommon(FMLCommonSetupEvent event) {
+        CapabilityBaubles.register();
+        PacketHandler.registerMessages();
+    }
 
-        public static List<MenuType<?>> CONTAINERS = new ArrayList<>();
+    private void setupClient(FMLClientSetupEvent event) {
+        MenuScreens.register(ModMenus.PLAYER_BAUBLES.get(), PlayerExpandedScreen::new);
+        ClientRegistry.registerKeyBinding(KEY_BAUBLES);
+    }
 
-        @ObjectHolder("baubles:player_baubles")
-        public static MenuType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", (id, inv, data) -> new PlayerExpandedContainer(id, inv, !inv.player.level.isClientSide));
+    private void loadComplete(FMLLoadCompleteEvent event){
+        //TODO: Add IRenderBauble layers.
+        /*Map<String, EntityRenderer<? extends Player>> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
+        PlayerRenderer render;
+        render = skinMap.get("default");
+        render.addLayer(new BaublesRenderLayer(render));
 
-        private static <T extends AbstractContainerMenu> MenuType<T> createContainer(String name, IContainerFactory<T> factory) {
-            MenuType<T> containerType = IForgeContainerType.create(factory);
-            containerType.setRegistryName(new ResourceLocation(BaublesAPI.MOD_ID, name));
-            CONTAINERS.add(containerType);
-            return containerType;
-        }
-
-        @SubscribeEvent
-        public static void onContainerRegister(final RegistryEvent.Register<MenuType<?>> event) {
-            event.getRegistry().registerAll(CONTAINERS.toArray(new MenuType[0]));
-        }
+        render = skinMap.get("slim");
+        render.addLayer(new BaublesRenderLayer(render));*/
     }
 }
