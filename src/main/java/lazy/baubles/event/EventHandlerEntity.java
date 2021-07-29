@@ -3,7 +3,7 @@ package lazy.baubles.event;
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.cap.CapabilityBaubles;
-import lazy.baubles.api.cap.IBaublesItemHandler;
+import lazy.baubles.api.bauble.IBaublesItemHandler;
 import lazy.baubles.capability.BaublesContainer;
 import lazy.baubles.capability.BaublesContainerProvider;
 import lazy.baubles.network.PacketHandler;

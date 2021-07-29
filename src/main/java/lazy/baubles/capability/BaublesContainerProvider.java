@@ -1,7 +1,7 @@
 package lazy.baubles.capability;
 
 import lazy.baubles.api.cap.CapabilityBaubles;
-import lazy.baubles.api.cap.IBaublesItemHandler;
+import lazy.baubles.api.bauble.IBaublesItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;

@@ -2,7 +2,7 @@ package lazy.baubles.capability;
 
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.cap.CapabilityBaubles;
-import lazy.baubles.api.cap.IBaublesItemHandler;
+import lazy.baubles.api.bauble.IBaublesItemHandler;
 import lazy.baubles.event.EventHandlerEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

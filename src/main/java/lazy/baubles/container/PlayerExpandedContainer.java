@@ -3,7 +3,7 @@ package lazy.baubles.container;
 import lazy.baubles.Baubles;
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.cap.CapabilityBaubles;
-import lazy.baubles.api.cap.IBaublesItemHandler;
+import lazy.baubles.api.bauble.IBaublesItemHandler;
 import lazy.baubles.container.slots.ArmorSlot;
 import lazy.baubles.container.slots.OffHandSlot;
 import lazy.baubles.container.slots.SlotBauble;

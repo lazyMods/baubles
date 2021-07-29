@@ -2,7 +2,7 @@ package lazy.baubles.api;
 
 import lazy.baubles.api.bauble.BaubleType;
 import lazy.baubles.api.cap.CapabilityBaubles;
-import lazy.baubles.api.cap.IBaublesItemHandler;
+import lazy.baubles.api.bauble.IBaublesItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;

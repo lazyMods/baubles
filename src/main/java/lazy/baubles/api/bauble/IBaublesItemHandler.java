@@ -1,4 +1,4 @@
-package lazy.baubles.api.cap;
+package lazy.baubles.api.bauble;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
