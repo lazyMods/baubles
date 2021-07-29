@@ -2,7 +2,7 @@ package lazy.baubles.event;
 
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.IBauble;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +31,7 @@ public class AttachCapability {
                 @Nonnull
                 @Override
                 public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-                    return BaublesCapabilities.ITEM_BAUBLE.orEmpty(cap, opt);
+                    return CapabilityBaubles.ITEM_BAUBLE.orEmpty(cap, opt);
                 }
             });
         }

@@ -1,7 +1,7 @@
 package lazy.baubles.api;
 
 import lazy.baubles.api.bauble.BaubleType;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -17,7 +17,7 @@ public class BaublesAPI {
 
     //Retrieves the baubles inventory capability handler for the supplied player
     public static LazyOptional<IBaublesItemHandler> getBaublesHandler(Player player) {
-        return player.getCapability(BaublesCapabilities.BAUBLES);
+        return player.getCapability(CapabilityBaubles.BAUBLES);
     }
 
     //Returns if the passed in item is equipped in a bauble slot. Will return the first slot found

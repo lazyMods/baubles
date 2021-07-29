@@ -2,7 +2,7 @@ package lazy.baubles.event;
 
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.IBauble;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import lazy.baubles.capability.BaublesContainer;
 import lazy.baubles.capability.BaublesContainerProvider;
@@ -35,9 +35,9 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public static void cloneCapabilitiesEvent(PlayerEvent.Clone event) {
         try {
-            event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bco -> {
+            event.getOriginal().getCapability(CapabilityBaubles.BAUBLES).ifPresent(bco -> {
                 CompoundTag nbt = ((BaublesContainer) bco).serializeNBT();
-                event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
+                event.getOriginal().getCapability(CapabilityBaubles.BAUBLES).ifPresent(bcn -> {
                     ((BaublesContainer) bcn).deserializeNBT(nbt);
                 });
             });
@@ -75,7 +75,7 @@ public class EventHandlerEntity {
         // player events
         if (event.phase == TickEvent.Phase.END) {
             Player player = event.player;
-            player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(IBaublesItemHandler::tick);
+            player.getCapability(CapabilityBaubles.BAUBLES).ifPresent(IBaublesItemHandler::tick);
         }
     }
 
@@ -93,8 +93,8 @@ public class EventHandlerEntity {
                 itemHandler.setStackInSlot(emptySlot, itemstack.copy());
                 itemstack.setCount(0);
             }
-        } else if (itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE).isPresent()) {
-            IBauble bauble = itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE).orElseThrow(NullPointerException::new);
+        } else if (itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE).isPresent()) {
+            IBauble bauble = itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE).orElseThrow(NullPointerException::new);
 
             IBaublesItemHandler itemHandler = BaublesAPI.getBaublesHandler(event.getPlayer()).orElseThrow(NullPointerException::new);
             int emptySlot = BaublesAPI.getEmptySlotForBaubleType(event.getPlayer(), bauble.getBaubleType(itemstack));
@@ -107,7 +107,7 @@ public class EventHandlerEntity {
     }
 
     private static void syncSlots(Player player, Collection<? extends Player> receivers) {
-        player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
+        player.getCapability(CapabilityBaubles.BAUBLES).ifPresent(baubles -> {
             for (byte i = 0; i < baubles.getSlots(); i++) {
                 syncSlot(player, i, baubles.getStackInSlot(i), receivers);
             }
@@ -129,7 +129,7 @@ public class EventHandlerEntity {
     }
 
     private static void dropItemsAt(Player player, Collection<ItemEntity> drops) {
-        player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
+        player.getCapability(CapabilityBaubles.BAUBLES).ifPresent(baubles -> {
             for (int i = 0; i < baubles.getSlots(); ++i) {
                 if (!baubles.getStackInSlot(i).isEmpty()) {
                     ItemEntity ei = new ItemEntity(player.level, player.getX(), player.getY() + player.getEyeHeight(), player.getZ(), baubles.getStackInSlot(i).copy());

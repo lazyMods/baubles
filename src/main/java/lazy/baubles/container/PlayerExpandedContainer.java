@@ -2,7 +2,7 @@ package lazy.baubles.container;
 
 import lazy.baubles.Baubles;
 import lazy.baubles.api.bauble.IBauble;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import lazy.baubles.container.slots.ArmorSlot;
 import lazy.baubles.container.slots.OffHandSlot;
@@ -37,7 +37,7 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
         this.isLocalWorld = localWorld;
         this.player = playerInventory.player;
 
-        this.baubles = this.player.getCapability(BaublesCapabilities.BAUBLES).orElseThrow(NullPointerException::new);
+        this.baubles = this.player.getCapability(CapabilityBaubles.BAUBLES).orElseThrow(NullPointerException::new);
 
         this.addSlot(new ResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 154, 28));
 
@@ -153,8 +153,8 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
                 }
             }
             // inv -> bauble
-            else if (itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).isPresent()) {
-                IBauble bauble = itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
+            else if (itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
+                IBauble bauble = itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
                 for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
                     if (bauble.canEquip(this.player) && !(this.slots.get(baubleSlot + 9)).hasItem() &&
                             !this.moveItemStackTo(itemstack1, baubleSlot + 9, baubleSlot + 10, false)) {
@@ -184,9 +184,9 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble && itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).isPresent()) {
+            if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble && itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
                 ItemStack finalItemstack = itemstack;
-                itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemstack)));
+                itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemstack)));
             }
 
             //TODO

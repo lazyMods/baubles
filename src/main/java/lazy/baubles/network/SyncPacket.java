@@ -1,6 +1,6 @@
 package lazy.baubles.network;
 
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,7 +42,7 @@ public class SyncPacket {
             if (world == null) return;
             Entity p = world.getEntity(playerId);
             if (p instanceof Player) {
-                p.getCapability(BaublesCapabilities.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
+                p.getCapability(CapabilityBaubles.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
             }
         });
         ctx.get().setPacketHandled(true);

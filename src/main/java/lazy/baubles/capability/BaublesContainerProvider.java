@@ -1,6 +1,6 @@
 package lazy.baubles.capability;
 
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +25,7 @@ public class BaublesContainerProvider implements INBTSerializable<CompoundTag>, 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        return BaublesCapabilities.BAUBLES.orEmpty(capability, opt);
+        return CapabilityBaubles.BAUBLES.orEmpty(capability, opt);
     }
 
     @Override

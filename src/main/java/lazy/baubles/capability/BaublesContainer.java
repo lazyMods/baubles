@@ -1,7 +1,7 @@
 package lazy.baubles.capability;
 
 import lazy.baubles.api.bauble.IBauble;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import lazy.baubles.event.EventHandlerEntity;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
-import org.antlr.v4.runtime.atn.SemanticContext;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
      * stack size) into the given slot.
      */
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        LazyOptional<IBauble> opt = stack.getCapability(BaublesCapabilities.ITEM_BAUBLE);
+        LazyOptional<IBauble> opt = stack.getCapability(CapabilityBaubles.ITEM_BAUBLE);
         if (stack.isEmpty() || !opt.isPresent())
             return false;
         IBauble bauble = opt.orElseThrow(NullPointerException::new);
@@ -81,7 +80,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
     public void tick() {
         for (int i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
-            stack.getCapability(BaublesCapabilities.ITEM_BAUBLE)
+            stack.getCapability(CapabilityBaubles.ITEM_BAUBLE)
                     .ifPresent(b -> b.onWornTick(holder, stack));
         }
         sync();
@@ -95,7 +94,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
         List<Player> receivers = null;
         for (byte i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
-            boolean autosync = stack.getCapability(BaublesCapabilities.ITEM_BAUBLE).map(b -> b.willAutoSync(holder)).orElse(false);
+            boolean autosync = stack.getCapability(CapabilityBaubles.ITEM_BAUBLE).map(b -> b.willAutoSync(holder)).orElse(false);
             if (changed[i] || autosync && !ItemStack.isSame(stack, previous[i])) {
                 if (receivers == null) {
                     receivers = new ArrayList<>(((ServerLevel) holder.level).getPlayers((serverPlayerEntity)-> true));

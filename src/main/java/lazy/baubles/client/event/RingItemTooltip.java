@@ -2,7 +2,7 @@ package lazy.baubles.client.event;
 
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.BaubleType;
-import lazy.baubles.api.cap.BaublesCapabilities;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,8 +17,8 @@ public class RingItemTooltip {
     @SubscribeEvent
     public static void tooltipEvent(ItemTooltipEvent event) {
         if (!event.getItemStack().isEmpty()) {
-            if(event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).isPresent()){
-                event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
+            if(event.getItemStack().getCapability(CapabilityBaubles.ITEM_BAUBLE).isPresent()){
+                event.getItemStack().getCapability(CapabilityBaubles.ITEM_BAUBLE).ifPresent(bauble -> {
                     BaubleType bt = bauble.getBaubleType(event.getItemStack());
                     TranslatableComponent text = new TranslatableComponent("name." + bt);
                     text.withStyle(ChatFormatting.GOLD);
