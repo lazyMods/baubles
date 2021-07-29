@@ -1,5 +1,7 @@
 package lazy.baubles.api.bauble;
 
+import java.util.Arrays;
+
 public enum BaubleType {
     AMULET(0),
     RING(1, 2),
@@ -16,10 +18,7 @@ public enum BaubleType {
     }
 
     public boolean hasSlot(int slot) {
-        for (int s : validSlots) {
-            if (s == slot) return true;
-        }
-        return false;
+        return Arrays.stream(validSlots).anyMatch(s -> s == slot);
     }
 
     public int[] getValidSlots() {
@@ -27,14 +26,14 @@ public enum BaubleType {
     }
 
     public static BaubleType getFromString(String type){
-        switch (type) {
-            case "ring": return BaubleType.RING;
-            case "amulet": return BaubleType.AMULET;
-            case "belt": return BaubleType.BELT;
-            case "head": return BaubleType.HEAD;
-            case "body": return BaubleType.BODY;
-            case "charm": return BaubleType.CHARM;
-        }
-        return TRINKET;
+        return switch (type) {
+            case "ring" -> BaubleType.RING;
+            case "amulet" -> BaubleType.AMULET;
+            case "belt" -> BaubleType.BELT;
+            case "head" -> BaubleType.HEAD;
+            case "body" -> BaubleType.BODY;
+            case "charm" -> BaubleType.CHARM;
+            default -> TRINKET;
+        };
     }
 }
