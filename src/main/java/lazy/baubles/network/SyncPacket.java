@@ -2,12 +2,12 @@ package lazy.baubles.network;
 
 import lazy.baubles.api.cap.BaublesCapabilities;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -17,7 +17,7 @@ public class SyncPacket {
     public byte slot;
     ItemStack bauble;
 
-    public SyncPacket(PacketBuffer buf) {
+    public SyncPacket(FriendlyByteBuf buf) {
         this.playerId = buf.readInt();
         this.slot = buf.readByte();
         this.bauble = buf.readItem();
@@ -29,7 +29,7 @@ public class SyncPacket {
         this.bauble = bauble;
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(this.playerId);
         buf.writeByte(this.slot);
         buf.writeItem(this.bauble);
@@ -38,10 +38,10 @@ public class SyncPacket {
     @SuppressWarnings("ConstantConditions")
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ClientWorld world = Minecraft.getInstance().level;
+            ClientLevel world = Minecraft.getInstance().level;
             if (world == null) return;
             Entity p = world.getEntity(playerId);
-            if (p instanceof PlayerEntity) {
+            if (p instanceof Player) {
                 p.getCapability(BaublesCapabilities.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
             }
         });

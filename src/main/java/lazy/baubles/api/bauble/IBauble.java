@@ -1,7 +1,7 @@
 package lazy.baubles.api.bauble;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * This interface should be extended by items that can be worn in bauble slots

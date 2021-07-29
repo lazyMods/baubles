@@ -3,8 +3,8 @@ package lazy.baubles.api;
 import lazy.baubles.api.bauble.BaubleType;
 import lazy.baubles.api.cap.BaublesCapabilities;
 import lazy.baubles.api.cap.IBaublesItemHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
 
 /**
@@ -16,13 +16,13 @@ public class BaublesAPI {
     public static final String MOD_ID = "baubles";
 
     //Retrieves the baubles inventory capability handler for the supplied player
-    public static LazyOptional<IBaublesItemHandler> getBaublesHandler(PlayerEntity player) {
+    public static LazyOptional<IBaublesItemHandler> getBaublesHandler(Player player) {
         return player.getCapability(BaublesCapabilities.BAUBLES);
     }
 
     //Returns if the passed in item is equipped in a bauble slot. Will return the first slot found
     //@return -1 if not found and slot number if it is found
-    public static int isBaubleEquipped(PlayerEntity player, Item bauble) {
+    public static int isBaubleEquipped(Player player, Item bauble) {
         return getBaublesHandler(player).map(handler -> {
             for (int a = 0; a < handler.getSlots(); a++) {
                 if (!handler.getStackInSlot(a).isEmpty() && handler.getStackInSlot(a).getItem() == bauble)
@@ -32,7 +32,7 @@ public class BaublesAPI {
         }).orElse(-1);
     }
 
-    public static int getEmptySlotForBaubleType(PlayerEntity playerEntity, BaubleType type){
+    public static int getEmptySlotForBaubleType(Player playerEntity, BaubleType type){
         IBaublesItemHandler itemHandler = getBaublesHandler(playerEntity).orElseThrow(NullPointerException::new);
 
         for(int i : type.getValidSlots()){

@@ -3,15 +3,15 @@ package lazy.baubles.container.slots;
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.cap.BaublesCapabilities;
 import lazy.baubles.api.cap.IBaublesItemHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotBauble extends SlotItemHandler {
     int baubleSlot;
-    PlayerEntity player;
+    Player player;
 
-    public SlotBauble(PlayerEntity player, IBaublesItemHandler itemHandler, int slot, int par4, int par5) {
+    public SlotBauble(Player player, IBaublesItemHandler itemHandler, int slot, int par4, int par5) {
         super(itemHandler, slot, par4, par5);
         this.baubleSlot = slot;
         this.player = player;
@@ -26,7 +26,7 @@ public class SlotBauble extends SlotItemHandler {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player) {
+    public boolean mayPickup(Player player) {
         ItemStack stack = getItem();
         if (stack.isEmpty())
             return false;
@@ -36,12 +36,11 @@ public class SlotBauble extends SlotItemHandler {
     }
 
     @Override
-    public ItemStack onTake(PlayerEntity playerIn, ItemStack stack) {
+    public void onTake(Player playerIn, ItemStack stack) {
         if (!hasItem() && !((IBaublesItemHandler) getItemHandler()).isEventBlocked() && stack.getCapability(BaublesCapabilities.ITEM_BAUBLE).isPresent()) {
             stack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).ifPresent((iBauble) -> iBauble.onUnequipped(playerIn, stack));
         }
         super.onTake(playerIn, stack);
-        return stack;
     }
 
     @Override

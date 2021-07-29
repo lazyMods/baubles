@@ -2,9 +2,9 @@ package lazy.baubles.capability;
 
 import lazy.baubles.api.cap.BaublesCapabilities;
 import lazy.baubles.api.cap.IBaublesItemHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -12,12 +12,12 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
-public class BaublesContainerProvider implements INBTSerializable<CompoundNBT>, ICapabilityProvider {
+public class BaublesContainerProvider implements INBTSerializable<CompoundTag>, ICapabilityProvider {
 
     private BaublesContainer inner;
     private LazyOptional<IBaublesItemHandler> opt;
 
-    public BaublesContainerProvider(PlayerEntity player) {
+    public BaublesContainerProvider(Player player) {
         this.inner = new BaublesContainer(player);
         this.opt = LazyOptional.of(() -> inner);
     }
@@ -29,12 +29,12 @@ public class BaublesContainerProvider implements INBTSerializable<CompoundNBT>, 
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         return this.inner.serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.inner.deserializeNBT(nbt);
     }
 }

@@ -8,14 +8,14 @@ import lazy.baubles.capability.BaublesContainer;
 import lazy.baubles.capability.BaublesContainerProvider;
 import lazy.baubles.network.PacketHandler;
 import lazy.baubles.network.SyncPacket;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GameRules;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -24,7 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +36,7 @@ public class EventHandlerEntity {
     public static void cloneCapabilitiesEvent(PlayerEvent.Clone event) {
         try {
             event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bco -> {
-                CompoundNBT nbt = ((BaublesContainer) bco).serializeNBT();
+                CompoundTag nbt = ((BaublesContainer) bco).serializeNBT();
                 event.getOriginal().getCapability(BaublesCapabilities.BAUBLES).ifPresent(bcn -> {
                     ((BaublesContainer) bcn).deserializeNBT(nbt);
                 });
@@ -48,16 +48,16 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(BaublesAPI.MOD_ID, "container"), new BaublesContainerProvider((PlayerEntity) event.getObject()));
+        if (event.getObject() instanceof Player) {
+            event.addCapability(new ResourceLocation(BaublesAPI.MOD_ID, "container"), new BaublesContainerProvider((Player) event.getObject()));
         }
     }
 
     @SubscribeEvent
     public static void playerJoin(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity player = (ServerPlayerEntity) entity;
+        if (entity instanceof ServerPlayer) {
+            ServerPlayer player = (ServerPlayer) entity;
             syncSlots(player, Collections.singletonList(player));
         }
     }
@@ -65,8 +65,8 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
         Entity target = event.getTarget();
-        if (target instanceof ServerPlayerEntity) {
-            syncSlots((ServerPlayerEntity) target, Collections.singletonList(event.getPlayer()));
+        if (target instanceof ServerPlayer) {
+            syncSlots((ServerPlayer) target, Collections.singletonList(event.getPlayer()));
         }
     }
 
@@ -74,7 +74,7 @@ public class EventHandlerEntity {
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         // player events
         if (event.phase == TickEvent.Phase.END) {
-            PlayerEntity player = event.player;
+            Player player = event.player;
             player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(IBaublesItemHandler::tick);
         }
     }
@@ -106,7 +106,7 @@ public class EventHandlerEntity {
         }
     }
 
-    private static void syncSlots(PlayerEntity player, Collection<? extends PlayerEntity> receivers) {
+    private static void syncSlots(Player player, Collection<? extends Player> receivers) {
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
             for (byte i = 0; i < baubles.getSlots(); i++) {
                 syncSlot(player, i, baubles.getStackInSlot(i), receivers);
@@ -114,21 +114,21 @@ public class EventHandlerEntity {
         });
     }
 
-    public static void syncSlot(PlayerEntity player, byte slot, ItemStack stack, Collection<? extends PlayerEntity> receivers) {
+    public static void syncSlot(Player player, byte slot, ItemStack stack, Collection<? extends Player> receivers) {
         SyncPacket pkt = new SyncPacket(player.getId(), slot, stack);
-        for (PlayerEntity receiver : receivers) {
-            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) receiver), pkt);
+        for (Player receiver : receivers) {
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) receiver), pkt);
         }
     }
 
     @SubscribeEvent
     public static void playerDeath(LivingDropsEvent event) {
-        if (event.getEntity() instanceof PlayerEntity && !event.getEntity().level.isClientSide && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
-            dropItemsAt((PlayerEntity) event.getEntity(), event.getDrops());
+        if (event.getEntity() instanceof Player && !event.getEntity().level.isClientSide && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            dropItemsAt((Player) event.getEntity(), event.getDrops());
         }
     }
 
-    private static void dropItemsAt(PlayerEntity player, Collection<ItemEntity> drops) {
+    private static void dropItemsAt(Player player, Collection<ItemEntity> drops) {
         player.getCapability(BaublesCapabilities.BAUBLES).ifPresent(baubles -> {
             for (int i = 0; i < baubles.getSlots(); ++i) {
                 if (!baubles.getStackInSlot(i).isEmpty()) {

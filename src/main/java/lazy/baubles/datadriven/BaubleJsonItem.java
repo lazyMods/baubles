@@ -4,20 +4,19 @@ import lazy.baubles.api.bauble.BaubleType;
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.datadriven.model.BaubleModel;
 import lazy.baubles.datadriven.model.EffectModel;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -32,13 +31,13 @@ public class BaubleJsonItem extends Item implements IBauble {
     public List<BaubleModel> model;
 
     public BaubleJsonItem(List<BaubleModel> model) {
-        super(new Item.Properties().tab(ItemGroup.TAB_TOOLS));
+        super(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS));
         this.setRegistryName("bauble");
         this.model = model;
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         super.fillItemCategory(group, items);
         if (group != getItemCategory()) return;
         model.forEach(model -> {
@@ -46,28 +45,27 @@ public class BaubleJsonItem extends Item implements IBauble {
                 if (!ModList.get().isLoaded(modId)) return;
             }
             ItemStack stack = new ItemStack(this);
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
             if (stack.getTag() != null) stack.getTag().putString("registryName", model.getRegistryName());
             items.add(stack);
         });
     }
 
 
-
     @Override
-    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.getTag() != null) {
             model.forEach(model -> {
                 if (this.isRing(stack, model.getRegistryName())) {
-                    model.getTooltips().forEach(s -> tooltip.add(new StringTextComponent(s)));
+                    model.getTooltips().forEach(s -> tooltip.add(new TextComponent(s)));
                     if (model.canShowEffectsTooltip()) {
                         model.getEffects().forEach(effectModel -> {
                             if (!ForgeRegistries.POTIONS.containsKey(new ResourceLocation(effectModel.getEffectRegistryName())))
                                 return;
-                            Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
+                            MobEffect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
                             if (effect != null) {
-                                StringTextComponent effectName = new StringTextComponent("");
+                                TextComponent effectName = new TextComponent("");
                                 effectName.append(effect.getDisplayName().getString() + " " + getFromInteger(Math.min(effectModel.getEffectLevel(), 99)));
                                 tooltip.add(effectName);
                             }
@@ -77,7 +75,6 @@ public class BaubleJsonItem extends Item implements IBauble {
             });
         }
     }
-
 
 
     @Override
@@ -94,8 +91,8 @@ public class BaubleJsonItem extends Item implements IBauble {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
-        StringTextComponent textComponent = new StringTextComponent("");
+    public Component getName(ItemStack stack) {
+        TextComponent textComponent = new TextComponent("");
         if (stack.getTag() != null) {
             model.forEach(model -> {
                 if (this.isRing(stack, model.getRegistryName())) {
@@ -126,9 +123,9 @@ public class BaubleJsonItem extends Item implements IBauble {
                 if (this.isRing(stack, model.getRegistryName())) {
                     for (EffectModel effectModel : model.getEffects()) {
                         if (ForgeRegistries.POTIONS.containsKey(new ResourceLocation(effectModel.getEffectRegistryName()))) {
-                            Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
+                            MobEffect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
                             if (effect != null)
-                                player.addEffect(new EffectInstance(effect, 999999, Math.min(effectModel.getEffectLevel(), 99)));
+                                player.addEffect(new MobEffectInstance(effect, 999999, Math.min(effectModel.getEffectLevel(), 99)));
                         }
                     }
                 }
@@ -142,7 +139,7 @@ public class BaubleJsonItem extends Item implements IBauble {
             model.forEach(model -> {
                 if (this.isRing(stack, model.getRegistryName())) {
                     for (EffectModel effectModel : model.getEffects()) {
-                        Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
+                        MobEffect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectModel.getEffectRegistryName()));
                         if (effect != null) player.removeEffect(effect);
                     }
                 }

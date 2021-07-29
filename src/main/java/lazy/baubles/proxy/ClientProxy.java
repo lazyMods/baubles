@@ -2,22 +2,17 @@ package lazy.baubles.proxy;
 
 import lazy.baubles.Baubles;
 import lazy.baubles.client.gui.PlayerExpandedScreen;
-import lazy.baubles.client.renderer.BaublesRenderLayer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Map;
 
 public class ClientProxy extends CommonProxy {
 
-    public static final KeyBinding KEY_BAUBLES = new KeyBinding("keybind.baublesinventory", GLFW.GLFW_KEY_B, "key.categories.inventory");
+    public static final KeyMapping KEY_BAUBLES = new KeyMapping("keybind.baublesinventory", GLFW.GLFW_KEY_B, "key.categories.inventory");
 
     @Override
     public void init() {
@@ -32,7 +27,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void setupClient(FMLClientSetupEvent event) {
-        ScreenManager.register(Baubles.Registration.PLAYER_BAUBLES, PlayerExpandedScreen::new);
+        MenuScreens.register(Baubles.Registration.PLAYER_BAUBLES, PlayerExpandedScreen::new);
         ClientRegistry.registerKeyBinding(KEY_BAUBLES);
     }
 
@@ -40,13 +35,14 @@ public class ClientProxy extends CommonProxy {
         this.addLayers();
     }
 
+    //TODO
     private void addLayers() {
-        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
+        /*Map<String, EntityRenderer<? extends Player>> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
         PlayerRenderer render;
         render = skinMap.get("default");
         render.addLayer(new BaublesRenderLayer(render));
 
         render = skinMap.get("slim");
-        render.addLayer(new BaublesRenderLayer(render));
+        render.addLayer(new BaublesRenderLayer(render));*/
     }
 }

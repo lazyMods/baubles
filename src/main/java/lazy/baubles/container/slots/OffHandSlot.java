@@ -1,17 +1,17 @@
 package lazy.baubles.container.slots;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 public class OffHandSlot extends Slot {
 
-    public OffHandSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    public OffHandSlot(Container inventoryIn, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }
 
@@ -23,6 +23,6 @@ public class OffHandSlot extends Slot {
     @Nullable
     @Override
     public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() { //getSlotTexture
-        return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
+        return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
     }
 }

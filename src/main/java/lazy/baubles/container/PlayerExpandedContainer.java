@@ -7,41 +7,39 @@ import lazy.baubles.api.cap.IBaublesItemHandler;
 import lazy.baubles.container.slots.ArmorSlot;
 import lazy.baubles.container.slots.OffHandSlot;
 import lazy.baubles.container.slots.SlotBauble;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class PlayerExpandedContainer extends Container {
+public class PlayerExpandedContainer extends AbstractContainerMenu {
 
-    public static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{PlayerContainer.EMPTY_ARMOR_SLOT_BOOTS, PlayerContainer.EMPTY_ARMOR_SLOT_LEGGINGS, PlayerContainer.EMPTY_ARMOR_SLOT_CHESTPLATE, PlayerContainer.EMPTY_ARMOR_SLOT_HELMET};
-    private static final EquipmentSlotType[] VALID_EQUIPMENT_SLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    private final CraftingInventory craftMatrix = new CraftingInventory(this, 2, 2);
-    private final CraftResultInventory craftResult = new CraftResultInventory();
+    public static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET};
+    private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+    private final CraftingContainer craftMatrix = new CraftingContainer(this, 2, 2);
+    private final ResultContainer craftResult = new ResultContainer();
     public final boolean isLocalWorld;
-    private final PlayerEntity player;
+    private final Player player;
 
     public IBaublesItemHandler baubles;
 
-    public PlayerExpandedContainer(int id, PlayerInventory playerInventory, boolean localWorld) {
+    public PlayerExpandedContainer(int id, Inventory playerInventory, boolean localWorld) {
         super(Baubles.Registration.PLAYER_BAUBLES, id);
         this.isLocalWorld = localWorld;
         this.player = playerInventory.player;
 
         this.baubles = this.player.getCapability(BaublesCapabilities.BAUBLES).orElseThrow(NullPointerException::new);
 
-        this.addSlot(new CraftingResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 154, 28));
+        this.addSlot(new ResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 154, 28));
 
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 2; ++j) {
@@ -50,7 +48,7 @@ public class PlayerExpandedContainer extends Container {
         }
 
         for (int k = 0; k < 4; ++k) {
-            final EquipmentSlotType equipmentslottype = VALID_EQUIPMENT_SLOTS[k];
+            final EquipmentSlot equipmentslottype = VALID_EQUIPMENT_SLOTS[k];
             this.addSlot(new ArmorSlot(playerInventory, 36 + (3 - k), 8, 8 + k * 18, equipmentslottype, this.player));
         }
 
@@ -76,11 +74,10 @@ public class PlayerExpandedContainer extends Container {
     }
 
 
-
     @Override
-    public void slotsChanged(IInventory par1IInventory) {
+    public void slotsChanged(Container par1IInventory) {
         try {
-            Method onCraftChange = ObfuscationReflectionHelper.findMethod(WorkbenchContainer.class, "func_217066_a", int.class, World.class, PlayerEntity.class, CraftingInventory.class, CraftResultInventory.class);
+            Method onCraftChange = ObfuscationReflectionHelper.findMethod(CraftingMenu.class, "func_217066_a", int.class, Level.class, Player.class, CraftingContainer.class, ResultContainer.class);
             onCraftChange.invoke(null, this.containerId, this.player.level, this.player, this.craftMatrix, this.craftResult);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -88,25 +85,24 @@ public class PlayerExpandedContainer extends Container {
     }
 
 
-
     @Override
-    public void removed(PlayerEntity player) {
+    public void removed(Player player) {
         super.removed(player);
         this.craftResult.clearContent();
 
         if (!player.level.isClientSide) {
-            this.clearContainer(player, player.level, this.craftMatrix);
+            this.clearContainer(player, this.craftMatrix);
         }
     }
 
-    
+
     @Override
-    public boolean stillValid(PlayerEntity par1PlayerEntity) {
+    public boolean stillValid(Player par1PlayerEntity) {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
@@ -114,7 +110,7 @@ public class PlayerExpandedContainer extends Container {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            EquipmentSlotType entityequipmentslot = MobEntity.getEquipmentSlotForItem(itemstack);
+            EquipmentSlot entityequipmentslot = Mob.getEquipmentSlotForItem(itemstack);
 
             int slotShift = baubles.getSlots();
 
@@ -142,7 +138,7 @@ public class PlayerExpandedContainer extends Container {
             }
 
             // inv -> armor
-            else if (entityequipmentslot.getType() == EquipmentSlotType.Group.ARMOR && !(this.slots.get(8 - entityequipmentslot.getIndex())).hasItem()) {
+            else if (entityequipmentslot.getType() == EquipmentSlot.Type.ARMOR && !(this.slots.get(8 - entityequipmentslot.getIndex())).hasItem()) {
                 int i = 8 - entityequipmentslot.getIndex();
 
                 if (!this.moveItemStackTo(itemstack1, i, i + 1, false)) {
@@ -151,7 +147,7 @@ public class PlayerExpandedContainer extends Container {
             }
 
             // inv -> offhand
-            else if (entityequipmentslot == EquipmentSlotType.OFFHAND && !(this.slots.get(45 + slotShift)).hasItem()) {
+            else if (entityequipmentslot == EquipmentSlot.OFFHAND && !(this.slots.get(45 + slotShift)).hasItem()) {
                 if (!this.moveItemStackTo(itemstack1, 45 + slotShift, 46 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -193,16 +189,16 @@ public class PlayerExpandedContainer extends Container {
                 itemstack.getCapability(BaublesCapabilities.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemstack)));
             }
 
-            ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
+            //TODO
+            /*ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
 
             if (index == 0) {
                 playerIn.drop(itemstack2, false);
-            }
+            }*/
         }
 
         return itemstack;
     }
-
 
 
     @Override

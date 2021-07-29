@@ -1,6 +1,6 @@
 package lazy.baubles.api.cap;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public interface IBaublesItemHandler extends IItemHandlerModifiable {

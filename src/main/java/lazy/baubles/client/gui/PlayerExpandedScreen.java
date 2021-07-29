@@ -1,53 +1,54 @@
 package lazy.baubles.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lazy.baubles.container.PlayerExpandedContainer;
 import lazy.baubles.proxy.ClientProxy;
-import net.minecraft.client.gui.DisplayEffectsScreen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedContainer> {
+public class PlayerExpandedScreen extends EffectRenderingInventoryScreen<PlayerExpandedContainer> {
 
     public static final ResourceLocation background = new ResourceLocation("baubles", "textures/gui/expanded_inventory.png");
 
     private float oldMouseX;
     private float oldMouseY;
 
-    public PlayerExpandedScreen(PlayerExpandedContainer container, PlayerInventory inventory, ITextComponent name) {
+    public PlayerExpandedScreen(PlayerExpandedContainer container, Inventory inventory, Component name) {
         super(container, inventory, name);
     }
 
-    @Override
+    //TODO
+    /*@Override
     public void tick() { //tick
         this.menu.baubles.setEventBlock(false);
         this.checkEffectRendering();
         this.resetGuiLeft();
-    }
+    }*/
 
     @Override
     protected void init() {
-        this.buttons.clear();
+        this.renderables.clear();
         super.init();
         this.resetGuiLeft();
     }
 
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         if (this.minecraft != null) {
-            this.minecraft.font.draw(matrixStack, new TranslationTextComponent("container.crafting"), 115, 8, 4210752);
+            this.minecraft.font.draw(matrixStack, new TranslatableComponent("container.crafting"), 115, 8, 4210752);
         }
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) { //render
         this.renderBackground(matrixStack); //renderBackground
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY); //renderHoveredToolTip
@@ -56,10 +57,10 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         if (this.minecraft != null) {
-            this.minecraft.getTextureManager().bind(background);
+            this.minecraft.getTextureManager().bindForSetup(background);
             int k = this.leftPos;
             int l = this.topPos;
             this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
@@ -75,7 +76,7 @@ public class PlayerExpandedScreen extends DisplayEffectsScreen<PlayerExpandedCon
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int what) {
-        if (ClientProxy.KEY_BAUBLES.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode))) {
+        if (ClientProxy.KEY_BAUBLES.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode))) {
             if (this.minecraft != null) {
                 this.minecraft.player.closeContainer();
             }

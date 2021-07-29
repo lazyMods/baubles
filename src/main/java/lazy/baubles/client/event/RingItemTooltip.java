@@ -3,8 +3,8 @@ package lazy.baubles.client.event;
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.BaubleType;
 import lazy.baubles.api.cap.BaublesCapabilities;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,8 +20,8 @@ public class RingItemTooltip {
             if(event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).isPresent()){
                 event.getItemStack().getCapability(BaublesCapabilities.ITEM_BAUBLE).ifPresent(bauble -> {
                     BaubleType bt = bauble.getBaubleType(event.getItemStack());
-                    TranslationTextComponent text = new TranslationTextComponent("name." + bt);
-                    text.withStyle(TextFormatting.GOLD);
+                    TranslatableComponent text = new TranslatableComponent("name." + bt);
+                    text.withStyle(ChatFormatting.GOLD);
                     event.getToolTip().add(text);
                 });
             }

@@ -4,15 +4,15 @@ import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.container.PlayerExpandedContainer;
 import lazy.baubles.proxy.ClientProxy;
 import lazy.baubles.proxy.CommonProxy;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.fmllegacy.network.IContainerFactory;
 import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.ArrayList;
@@ -31,21 +31,21 @@ public class Baubles {
     @Mod.EventBusSubscriber(modid = BaublesAPI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration {
 
-        public static List<ContainerType<?>> CONTAINERS = new ArrayList<>();
+        public static List<MenuType<?>> CONTAINERS = new ArrayList<>();
 
         @ObjectHolder("baubles:player_baubles")
-        public static ContainerType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", (id, inv, data) -> new PlayerExpandedContainer(id, inv, !inv.player.level.isClientSide));
+        public static MenuType<PlayerExpandedContainer> PLAYER_BAUBLES = createContainer("player_baubles", (id, inv, data) -> new PlayerExpandedContainer(id, inv, !inv.player.level.isClientSide));
 
-        private static <T extends Container> ContainerType<T> createContainer(String name, IContainerFactory<T> factory) {
-            ContainerType<T> containerType = IForgeContainerType.create(factory);
+        private static <T extends AbstractContainerMenu> MenuType<T> createContainer(String name, IContainerFactory<T> factory) {
+            MenuType<T> containerType = IForgeContainerType.create(factory);
             containerType.setRegistryName(new ResourceLocation(BaublesAPI.MOD_ID, name));
             CONTAINERS.add(containerType);
             return containerType;
         }
 
         @SubscribeEvent
-        public static void onContainerRegister(final RegistryEvent.Register<ContainerType<?>> event) {
-            event.getRegistry().registerAll(CONTAINERS.toArray(new ContainerType[0]));
+        public static void onContainerRegister(final RegistryEvent.Register<MenuType<?>> event) {
+            event.getRegistry().registerAll(CONTAINERS.toArray(new MenuType[0]));
         }
     }
 }

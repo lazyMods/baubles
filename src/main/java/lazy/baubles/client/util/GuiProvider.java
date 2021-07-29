@@ -1,25 +1,25 @@
 package lazy.baubles.client.util;
 
 import lazy.baubles.container.PlayerExpandedContainer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
 
-public class GuiProvider implements INamedContainerProvider {
+public class GuiProvider implements MenuProvider {
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent("PlayerBaublesInv");
+    public Component getDisplayName() {
+        return new TextComponent("PlayerBaublesInv");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
         return new PlayerExpandedContainer(id, playerInventory, !playerEntity.level.isClientSide);
     }
 }

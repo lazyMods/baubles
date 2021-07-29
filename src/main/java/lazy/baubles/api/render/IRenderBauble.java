@@ -2,8 +2,8 @@ package lazy.baubles.api.render;
 
 import lazy.baubles.api.bauble.IBauble;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Mth;
 
 /**
  * A Bauble Item that implements this will be have hooks to render something on
@@ -19,7 +19,7 @@ public interface IRenderBauble extends IBauble {
      * the RenderType passed in. Make sure to check against the type parameter for
      * rendering.
      */
-    void onPlayerBaubleRender(PlayerEntity player, RenderType type, float partialTicks);
+    void onPlayerBaubleRender(Player player, RenderType type, float partialTicks);
 
 
     /**
@@ -31,7 +31,7 @@ public interface IRenderBauble extends IBauble {
          * Rotates the render for a bauble correctly if the player is sneaking.
          * Use for renders under {@link RenderType#BODY}.
          */
-        public static void rotateIfSneaking(PlayerEntity player) {
+        public static void rotateIfSneaking(Player player) {
             if (player.isCrouching())
                 applySneakingRotation();
         }
@@ -41,28 +41,31 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}.
          */
         public static void applySneakingRotation() {
-            GlStateManager._translatef(0F, 0.2F, 0F);
-            GlStateManager._rotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
+            //TODO
+            /*GlStateManager._translatef(0F, 0.2F, 0F);
+            GlStateManager._rotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);*/
         }
 
         /**
          * Shifts the render for a bauble correctly to the head, including sneaking rotation.
          * Use for renders under {@link RenderType#HEAD}.
          */
-        public static void translateToHeadLevel(PlayerEntity player) {
-            GlStateManager._translatef(0, -player.getEyeHeight(), 0);
+        public static void translateToHeadLevel(Player player) {
+            //TODO
+            /*GlStateManager._translatef(0, -player.getEyeHeight(), 0);
             if (player.isCrouching())
-                GlStateManager._translatef(0.25F * MathHelper.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * MathHelper.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
-        }
+                GlStateManager._translatef(0.25F * Mth.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * Mth.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
+*/        }
 
         /**
          * Shifts the render for a bauble correctly to the face.
          * Use for renders under {@link RenderType#HEAD}, and usually after calling {@link Helper#translateToHeadLevel(PlayerEntity)}.
          */
         public static void translateToFace() {
-            GlStateManager._rotatef(90F, 0F, 1F, 0F);
+            //TODO
+            /*GlStateManager._rotatef(90F, 0F, 1F, 0F);
             GlStateManager._rotatef(180F, 1F, 0F, 0F);
-            GlStateManager._translatef(0f, -4.35f, -1.27f);
+            GlStateManager._translatef(0f, -4.35f, -1.27f);*/
         }
 
         /**
@@ -70,8 +73,9 @@ public interface IRenderBauble extends IBauble {
          * Use for any render.
          */
         public static void defaultTransforms() {
-            GlStateManager._translatef(0.0f, 3.0f, 1.0f);
-            GlStateManager._scalef(0.55f, 0.55f, 0.55f);
+            //TODO
+            /*GlStateManager._translatef(0.0f, 3.0f, 1.0f);
+            GlStateManager._scalef(0.55f, 0.55f, 0.55f);*/
         }
 
         /**
@@ -79,8 +83,9 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}, and usually after calling {@link Helper#rotateIfSneaking(PlayerEntity)}.
          */
         public static void translateToChest() {
-            GlStateManager._rotatef(180F, 1F, 0F, 0F);
-            GlStateManager._translatef(0F, -3.2F, -0.85F);
+            //TODO
+            /*GlStateManager._rotatef(180F, 1F, 0F, 0F);
+            GlStateManager._translatef(0F, -3.2F, -0.85F);*/
         }
     }
 

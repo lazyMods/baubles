@@ -4,11 +4,11 @@ import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.cap.BaublesCapabilities;
 import lazy.baubles.api.cap.IBaublesItemHandler;
 import lazy.baubles.event.EventHandlerEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 import org.antlr.v4.runtime.atn.SemanticContext;
@@ -88,20 +88,20 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
     }
 
     private void sync() {
-        if (!(holder instanceof ServerPlayerEntity)) {
+        if (!(holder instanceof ServerPlayer)) {
             return;
         }
 
-        List<PlayerEntity> receivers = null;
+        List<Player> receivers = null;
         for (byte i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
             boolean autosync = stack.getCapability(BaublesCapabilities.ITEM_BAUBLE).map(b -> b.willAutoSync(holder)).orElse(false);
             if (changed[i] || autosync && !ItemStack.isSame(stack, previous[i])) {
                 if (receivers == null) {
-                    receivers = new ArrayList<>(((ServerWorld) holder.level).getPlayers((serverPlayerEntity)-> true));
-                    receivers.add((ServerPlayerEntity) holder);
+                    receivers = new ArrayList<>(((ServerLevel) holder.level).getPlayers((serverPlayerEntity)-> true));
+                    receivers.add((ServerPlayer) holder);
                 }
-                EventHandlerEntity.syncSlot((ServerPlayerEntity) holder, i, stack, receivers);
+                EventHandlerEntity.syncSlot((ServerPlayer) holder, i, stack, receivers);
                 this.changed[i] = false;
                 previous[i] = stack.copy();
             }
