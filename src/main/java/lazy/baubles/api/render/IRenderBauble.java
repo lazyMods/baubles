@@ -1,9 +1,10 @@
 package lazy.baubles.api.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import lazy.baubles.api.bauble.IBauble;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import org.lwjgl.opengl.GL11;
 
 /**
  * A Bauble Item that implements this will be have hooks to render something on
@@ -41,9 +42,9 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}.
          */
         public static void applySneakingRotation() {
-            //TODO
-            /*GlStateManager._translatef(0F, 0.2F, 0F);
-            GlStateManager._rotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);*/
+            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+            GL11.glTranslatef(0F, 0.2F, 0F);
+            GL11.glRotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
         }
 
         /**
@@ -51,21 +52,21 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#HEAD}.
          */
         public static void translateToHeadLevel(Player player) {
-            //TODO
-            /*GlStateManager._translatef(0, -player.getEyeHeight(), 0);
+            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+            GL11.glTranslatef(0, -player.getEyeHeight(), 0);
             if (player.isCrouching())
-                GlStateManager._translatef(0.25F * Mth.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * Mth.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
-*/        }
+                GL11.glTranslatef(0.25F * Mth.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * Mth.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
+        }
 
         /**
          * Shifts the render for a bauble correctly to the face.
          * Use for renders under {@link RenderType#HEAD}, and usually after calling {@link Helper#translateToHeadLevel(PlayerEntity)}.
          */
         public static void translateToFace() {
-            //TODO
-            /*GlStateManager._rotatef(90F, 0F, 1F, 0F);
-            GlStateManager._rotatef(180F, 1F, 0F, 0F);
-            GlStateManager._translatef(0f, -4.35f, -1.27f);*/
+            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+            GL11.glRotatef(90F, 0F, 1F, 0F);
+            GL11.glRotatef(180F, 1F, 0F, 0F);
+            GL11.glTranslatef(0f, -4.35f, -1.27f);
         }
 
         /**
@@ -73,9 +74,9 @@ public interface IRenderBauble extends IBauble {
          * Use for any render.
          */
         public static void defaultTransforms() {
-            //TODO
-            /*GlStateManager._translatef(0.0f, 3.0f, 1.0f);
-            GlStateManager._scalef(0.55f, 0.55f, 0.55f);*/
+            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+            GL11.glTranslatef(0.0f, 3.0f, 1.0f);
+            GL11.glScalef(0.55f, 0.55f, 0.55f);
         }
 
         /**
@@ -83,9 +84,9 @@ public interface IRenderBauble extends IBauble {
          * Use for renders under {@link RenderType#BODY}, and usually after calling {@link Helper#rotateIfSneaking(PlayerEntity)}.
          */
         public static void translateToChest() {
-            //TODO
-            /*GlStateManager._rotatef(180F, 1F, 0F, 0F);
-            GlStateManager._translatef(0F, -3.2F, -0.85F);*/
+            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
+            GL11.glRotatef(180F, 1F, 0F, 0F);
+            GL11.glTranslatef(0F, -3.2F, -0.85F);
         }
     }
 

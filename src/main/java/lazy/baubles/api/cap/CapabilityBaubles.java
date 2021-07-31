@@ -15,7 +15,6 @@ public class CapabilityBaubles {
     public static final Capability<IBauble> ITEM_BAUBLE = null;
 
     public static void register(){
-        System.out.println("Registering baubles capabilities...");
         CapabilityManager.INSTANCE.register(IBaublesItemHandler.class);
         CapabilityManager.INSTANCE.register(IBauble.class);
     }
