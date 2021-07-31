@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
  * @author lazynessmind - porter
  */
 
+@SuppressWarnings("unused")
 public interface IBauble {
 
     /**

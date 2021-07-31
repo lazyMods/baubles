@@ -1,8 +1,8 @@
 package lazy.baubles.api;
 
 import lazy.baubles.api.bauble.BaubleType;
-import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.api.bauble.IBaublesItemHandler;
+import lazy.baubles.api.cap.CapabilityBaubles;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
  * @author Azanor
  * @author lazynessmind - porter
  */
+@SuppressWarnings({"ConstantConditions", "unused"})
 public class BaublesAPI {
 
     public static final String MOD_ID = "baubles";
@@ -32,11 +33,11 @@ public class BaublesAPI {
         }).orElse(-1);
     }
 
-    public static int getEmptySlotForBaubleType(Player playerEntity, BaubleType type){
+    public static int getEmptySlotForBaubleType(Player playerEntity, BaubleType type) {
         IBaublesItemHandler itemHandler = getBaublesHandler(playerEntity).orElseThrow(NullPointerException::new);
 
-        for(int i : type.getValidSlots()){
-            if(itemHandler.getStackInSlot(i).isEmpty()){
+        for (int i : type.getValidSlots()) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 return i;
             }
         }

@@ -1,20 +1,21 @@
 package lazy.baubles.datadriven.client;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.Direction;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class BaublesItemModel implements BakedModel {
 
     private final BakedModel givenModel;
@@ -27,17 +28,20 @@ public class BaublesItemModel implements BakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand) {
+    @Nonnull
+    public List<BakedQuad> getQuads(BlockState state, Direction side, @Nonnull Random rand) {
         return this.givenModel.getQuads(state, side, rand);
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData) {
+    @Nonnull
+    public List<BakedQuad> getQuads(BlockState state, Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         throw new AssertionError("OH NO  OH NO OH NO NONONONONOO");
     }
 
     @Override
-    public IModelData getModelData(BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
+    @Nonnull
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
         throw new AssertionError("OH NO  OH NO OH NO NONONONONOO");
     }
 
@@ -61,12 +65,14 @@ public class BaublesItemModel implements BakedModel {
         return this.givenModel.isCustomRenderer();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public TextureAtlasSprite getParticleIcon() {
         return null;
     }
 
     @Override
+    @Nonnull
     public ItemOverrides getOverrides() {
         return this.baublesItemOverridesList;
     }

@@ -1,7 +1,6 @@
 package lazy.baubles.datadriven.client;
 
 import lazy.baubles.api.BaublesAPI;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,11 +14,12 @@ public class BaubleItemModelSetup {
 
     @SubscribeEvent
     public static void onModelBakeEvent(ModelBakeEvent event) {
-        BakedModel existingModel = event.getModelRegistry().get(BaublesItemModel.INVENTORY_MODEL);
-        BaublesItemModel customModel = new BaublesItemModel(existingModel);
+        var existingModel = event.getModelRegistry().get(BaublesItemModel.INVENTORY_MODEL);
+        var customModel = new BaublesItemModel(existingModel);
         event.getModelRegistry().put(BaublesItemModel.INVENTORY_MODEL, customModel);
     }
 
+    @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void onTextureStitching(TextureStitchEvent.Pre e) {
         if (!e.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;

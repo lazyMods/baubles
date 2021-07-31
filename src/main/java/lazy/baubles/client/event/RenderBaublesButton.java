@@ -15,10 +15,9 @@ public class RenderBaublesButton {
     @SubscribeEvent
     public static void onGuiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
         Screen screen = event.getGui();
-        if (screen instanceof EffectRenderingInventoryScreen) {
-            EffectRenderingInventoryScreen displayEffectsScreen = (EffectRenderingInventoryScreen) screen;
+        if (screen instanceof EffectRenderingInventoryScreen effectRenderingInventoryScreen) {
             if (event.getWidgetList() != null) {
-                event.addWidget(new BaublesButton(displayEffectsScreen, 64, 9, 10, 10));
+                event.addWidget(new BaublesButton(effectRenderingInventoryScreen, 64, 9, 10, 10));
             }
         }
     }

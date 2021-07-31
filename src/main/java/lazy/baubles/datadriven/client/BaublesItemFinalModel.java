@@ -15,48 +15,35 @@ import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Transformation;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BaublesItemFinalModel implements BakedModel {
-
-    private final BakedModel givenModel;
-    private final BaubleType type;
-
-    public BaublesItemFinalModel(BakedModel givenModel, BaubleType type) {
-        this.givenModel = givenModel;
-        this.type = type;
-    }
+@SuppressWarnings({"NullableProblems", "deprecation", "ConstantConditions"})
+public record BaublesItemFinalModel(BakedModel givenModel, BaubleType type) implements BakedModel {
 
     public ResourceLocation getFromType(BaubleType type) {
-        switch (type) {
-            case RING:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/ring");
-            case BELT:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/belt");
-            case BODY:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/body");
-            case HEAD:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/head");
-            case CHARM:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/charm");
-            case AMULET:
-                return new ResourceLocation(BaublesAPI.MOD_ID, "item/amulet");
-        }
-        return new ResourceLocation(BaublesAPI.MOD_ID, "item/trinket");
+        return switch (type) {
+            case RING -> new ResourceLocation(BaublesAPI.MOD_ID, "item/ring");
+            case BELT -> new ResourceLocation(BaublesAPI.MOD_ID, "item/belt");
+            case BODY -> new ResourceLocation(BaublesAPI.MOD_ID, "item/body");
+            case HEAD -> new ResourceLocation(BaublesAPI.MOD_ID, "item/head");
+            case CHARM -> new ResourceLocation(BaublesAPI.MOD_ID, "item/charm");
+            case AMULET -> new ResourceLocation(BaublesAPI.MOD_ID, "item/amulet");
+            default -> new ResourceLocation(BaublesAPI.MOD_ID, "item/trinket");
+        };
     }
 
     @Override
+    @Nonnull
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand) {
         TextureAtlasSprite baubleSprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(this.getFromType(this.type));
 
         if (side != null) return this.givenModel.getQuads(state, side, rand);
 
-        List<BakedQuad> quads = new ArrayList<>(this.givenModel.getQuads(state, side, rand));
+        List<BakedQuad> quads = new ArrayList<>(this.givenModel.getQuads(state, null, rand));
         quads.addAll(ItemLayerModel.getQuadsForSprite(0, baubleSprite, Transformation.identity()));
         return quads;
     }
@@ -70,8 +57,6 @@ public class BaublesItemFinalModel implements BakedModel {
     public boolean isGui3d() {
         return this.givenModel.isGui3d();
     }
-
-
 
     @Override
     public boolean usesBlockLight() {

@@ -13,7 +13,7 @@ public class ReloadJsonBaubles {
     public static void onReloadCommand(CommandEvent event) {
         if (!ForgeRegistries.ITEMS.containsKey(new ResourceLocation("baubles:ring"))) return;
         if (event.getParseResults().getReader().getRead().equals("/reload")) {
-            BaubleJsonItem ring = (BaubleJsonItem) ForgeRegistries.ITEMS.getValue(new ResourceLocation("baubles:ring"));
+            var ring = (BaubleJsonItem) ForgeRegistries.ITEMS.getValue(new ResourceLocation("baubles:ring"));
             if (ring != null) ring.setModel(BaubleJson.loadBaubles());
         }
     }

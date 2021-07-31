@@ -7,6 +7,7 @@ import lazy.baubles.api.bauble.IBaublesItemHandler;
 import lazy.baubles.container.slots.ArmorSlot;
 import lazy.baubles.container.slots.OffHandSlot;
 import lazy.baubles.container.slots.SlotBauble;
+import lazy.baubles.setup.ModMenus;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,9 +19,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("ConstantConditions")
 public class PlayerExpandedContainer extends AbstractContainerMenu {
 
     public static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET};
@@ -33,7 +36,7 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
     public IBaublesItemHandler baubles;
 
     public PlayerExpandedContainer(int id, Inventory playerInventory, boolean localWorld) {
-        super(Baubles.Registration.PLAYER_BAUBLES, id);
+        super(ModMenus.PLAYER_BAUBLES.get(), id);
         this.isLocalWorld = localWorld;
         this.player = playerInventory.player;
 
@@ -48,17 +51,11 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
         }
 
         for (int k = 0; k < 4; ++k) {
-            final EquipmentSlot equipmentslottype = VALID_EQUIPMENT_SLOTS[k];
-            this.addSlot(new ArmorSlot(playerInventory, 36 + (3 - k), 8, 8 + k * 18, equipmentslottype, this.player));
+            var equipmentSlotType = VALID_EQUIPMENT_SLOTS[k];
+            this.addSlot(new ArmorSlot(playerInventory, 36 + (3 - k), 8, 8 + k * 18, equipmentSlotType, this.player));
         }
 
-        this.addSlot(new SlotBauble(player, baubles, 0, 77, 8));
-        this.addSlot(new SlotBauble(player, baubles, 1, 77, 8 + 1 * 18));
-        this.addSlot(new SlotBauble(player, baubles, 2, 77, 8 + 2 * 18));
-        this.addSlot(new SlotBauble(player, baubles, 3, 77, 8 + 3 * 18));
-        this.addSlot(new SlotBauble(player, baubles, 4, 96, 8));
-        this.addSlot(new SlotBauble(player, baubles, 5, 96, 8 + 1 * 18));
-        this.addSlot(new SlotBauble(player, baubles, 6, 96, 8 + 2 * 18));
+        this.addBaubleSlots();
 
         for (int l = 0; l < 3; ++l) {
             for (int j1 = 0; j1 < 9; ++j1) {
@@ -75,7 +72,7 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
 
 
     @Override
-    public void slotsChanged(Container par1IInventory) {
+    public void slotsChanged(@Nonnull Container container) {
         try {
             Method onCraftChange = ObfuscationReflectionHelper.findMethod(CraftingMenu.class, "func_217066_a", int.class, Level.class, Player.class, CraftingContainer.class, ResultContainer.class);
             onCraftChange.invoke(null, this.containerId, this.player.level, this.player, this.craftMatrix, this.craftResult);
@@ -86,7 +83,7 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
 
 
     @Override
-    public void removed(Player player) {
+    public void removed(@Nonnull Player player) {
         super.removed(player);
         this.craftResult.clearContent();
 
@@ -97,107 +94,108 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
 
 
     @Override
-    public boolean stillValid(Player par1PlayerEntity) {
+    public boolean stillValid(@Nonnull Player par1PlayerEntity) {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
+    @Nonnull
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
+        var itemStack = ItemStack.EMPTY;
+        var slot = this.slots.get(index);
 
         if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+            var stackInSlot = slot.getItem();
+            itemStack = stackInSlot.copy();
 
-            EquipmentSlot entityequipmentslot = Mob.getEquipmentSlotForItem(itemstack);
+            var entityEquipmentSlot = Mob.getEquipmentSlotForItem(itemStack);
 
             int slotShift = baubles.getSlots();
 
             if (index == 0) {
-                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, true)) {
+                if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 45 + slotShift, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onQuickCraft(itemstack1, itemstack);
+                slot.onQuickCraft(stackInSlot, itemStack);
             } else if (index >= 1 && index < 5) {
-                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= 5 && index < 9) {
-                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // baubles -> inv
             else if (index >= 9 && index < 9 + slotShift) {
-                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // inv -> armor
-            else if (entityequipmentslot.getType() == EquipmentSlot.Type.ARMOR && !(this.slots.get(8 - entityequipmentslot.getIndex())).hasItem()) {
-                int i = 8 - entityequipmentslot.getIndex();
+            else if (entityEquipmentSlot.getType() == EquipmentSlot.Type.ARMOR && !(this.slots.get(8 - entityEquipmentSlot.getIndex())).hasItem()) {
+                int i = 8 - entityEquipmentSlot.getIndex();
 
-                if (!this.moveItemStackTo(itemstack1, i, i + 1, false)) {
+                if (!this.moveItemStackTo(stackInSlot, i, i + 1, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             // inv -> offhand
-            else if (entityequipmentslot == EquipmentSlot.OFFHAND && !(this.slots.get(45 + slotShift)).hasItem()) {
-                if (!this.moveItemStackTo(itemstack1, 45 + slotShift, 46 + slotShift, false)) {
+            else if (entityEquipmentSlot == EquipmentSlot.OFFHAND && !(this.slots.get(45 + slotShift)).hasItem()) {
+                if (!this.moveItemStackTo(stackInSlot, 45 + slotShift, 46 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             }
             // inv -> bauble
-            else if (itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
-                IBauble bauble = itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
-                for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
+            else if (itemStack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
+                var bauble = itemStack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).orElseThrow(NullPointerException::new);
+                for (int baubleSlot : bauble.getBaubleType(itemStack).getValidSlots()) {
                     if (bauble.canEquip(this.player) && !(this.slots.get(baubleSlot + 9)).hasItem() &&
-                            !this.moveItemStackTo(itemstack1, baubleSlot + 9, baubleSlot + 10, false)) {
+                            !this.moveItemStackTo(stackInSlot, baubleSlot + 9, baubleSlot + 10, false)) {
                         return ItemStack.EMPTY;
                     }
-                    if (itemstack1.getCount() == 0) break;
+                    if (stackInSlot.getCount() == 0) break;
                 }
             } else if (index >= 9 + slotShift && index < 36 + slotShift) {
-                if (!this.moveItemStackTo(itemstack1, 36 + slotShift, 45 + slotShift, false)) {
+                if (!this.moveItemStackTo(stackInSlot, 36 + slotShift, 45 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= 36 + slotShift && index < 45 + slotShift) {
-                if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 36 + slotShift, false)) {
+                if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 36 + slotShift, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 9 + slotShift, 45 + slotShift, false)) {
+            } else if (!this.moveItemStackTo(stackInSlot, 9 + slotShift, 45 + slotShift, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty()) {
+            if (stackInSlot.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
 
-            if (itemstack1.getCount() == itemstack.getCount()) {
+            if (stackInSlot.getCount() == itemStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble && itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
-                ItemStack finalItemstack = itemstack;
-                itemstack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemstack)));
+            if (stackInSlot.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble && itemStack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).isPresent()) {
+                var finalItemStack = itemStack;
+                itemStack.getCapability(CapabilityBaubles.ITEM_BAUBLE, null).ifPresent((iBauble -> iBauble.onEquipped(playerIn, finalItemStack)));
             }
 
             //TODO
-            /*ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
+            /*ItemStack itemstack2 = slot.onTake(playerIn, stackInSlot);
 
             if (index == 0) {
                 playerIn.drop(itemstack2, false);
             }*/
         }
 
-        return itemstack;
+        return itemStack;
     }
 
 
@@ -207,6 +205,12 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
     }
 
     private void addBaubleSlots() {
-
+        this.addSlot(new SlotBauble(player, baubles, 0, 77, 8));
+        this.addSlot(new SlotBauble(player, baubles, 1, 77, 8 + 18));
+        this.addSlot(new SlotBauble(player, baubles, 2, 77, 8 + 2 * 18));
+        this.addSlot(new SlotBauble(player, baubles, 3, 77, 8 + 3 * 18));
+        this.addSlot(new SlotBauble(player, baubles, 4, 96, 8));
+        this.addSlot(new SlotBauble(player, baubles, 5, 96, 8 + 18));
+        this.addSlot(new SlotBauble(player, baubles, 6, 96, 8 + 2 * 18));
     }
 }

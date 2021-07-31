@@ -12,20 +12,21 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("ConstantConditions")
 public class BaublesContainerProvider implements INBTSerializable<CompoundTag>, ICapabilityProvider {
 
-    private BaublesContainer inner;
-    private LazyOptional<IBaublesItemHandler> opt;
+    private final BaublesContainer inner;
+    private final LazyOptional<IBaublesItemHandler> baublesHandlerCap;
 
     public BaublesContainerProvider(Player player) {
         this.inner = new BaublesContainer(player);
-        this.opt = LazyOptional.of(() -> inner);
+        this.baublesHandlerCap = LazyOptional.of(() -> this.inner);
     }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        return CapabilityBaubles.BAUBLES.orEmpty(capability, opt);
+        return CapabilityBaubles.BAUBLES.orEmpty(capability, this.baublesHandlerCap);
     }
 
     @Override

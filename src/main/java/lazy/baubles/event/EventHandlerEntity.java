@@ -37,7 +37,7 @@ public class EventHandlerEntity {
     public static void cloneCapabilitiesEvent(PlayerEvent.Clone event) {
         try {
             event.getOriginal().getCapability(CapabilityBaubles.BAUBLES).ifPresent(bco -> {
-                CompoundTag nbt = ((BaublesContainer) bco).serializeNBT();
+                var nbt = ((BaublesContainer) bco).serializeNBT();
                 event.getOriginal().getCapability(CapabilityBaubles.BAUBLES).ifPresent(bcn -> ((BaublesContainer) bcn).deserializeNBT(nbt));
             });
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public static void playerJoin(EntityJoinWorldEvent event) {
-        Entity entity = event.getEntity();
+        var entity = event.getEntity();
         if (entity instanceof ServerPlayer serverPlayer) {
             syncSlots(serverPlayer, Collections.singletonList(serverPlayer));
         }
@@ -62,7 +62,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-        Entity target = event.getTarget();
+        var target = event.getTarget();
         if (target instanceof ServerPlayer serverPlayer) {
             syncSlots(serverPlayer, Collections.singletonList(event.getPlayer()));
         }

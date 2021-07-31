@@ -11,12 +11,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ArmorSlot extends Slot {
 
-    private EquipmentSlot slotType;
-    private Player playerEntity;
+    private final EquipmentSlot slotType;
+    private final Player playerEntity;
 
     public ArmorSlot(Container inventoryIn, int index, int xPosition, int yPosition, EquipmentSlot slotType, Player playerEntity) {
         super(inventoryIn, index, xPosition, yPosition);
@@ -35,14 +36,14 @@ public class ArmorSlot extends Slot {
     }
 
     @Override
-    public boolean mayPickup(Player playerIn) {
-        ItemStack itemstack = this.getItem();
-        return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.mayPickup(playerIn);
+    public boolean mayPickup(@Nonnull Player playerIn) {
+        var itemStack = this.getItem();
+        return (itemStack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.mayPickup(playerIn);
     }
 
     @Nullable
     @Override
-    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() { //getSlotTexture
+    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
         return Pair.of(InventoryMenu.BLOCK_ATLAS, PlayerExpandedContainer.ARMOR_SLOT_TEXTURES[slotType.getIndex()]);
     }
 }

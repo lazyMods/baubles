@@ -1,9 +1,9 @@
 package lazy.baubles.client.event;
 
+import lazy.baubles.Baubles;
 import lazy.baubles.api.BaublesAPI;
-import lazy.baubles.network.OpenBaublesInvPacket;
+import lazy.baubles.network.msg.OpenBaublesInvPacket;
 import lazy.baubles.network.PacketHandler;
-import lazy.baubles.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -16,7 +16,7 @@ public class ClientPlayerTick {
     @SubscribeEvent
     public static void playerTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            if (ClientProxy.KEY_BAUBLES.consumeClick() && Minecraft.getInstance().isWindowActive()) {
+            if (Baubles.KEY_BAUBLES.consumeClick() && Minecraft.getInstance().isWindowActive()) {
                 PacketHandler.INSTANCE.sendToServer(new OpenBaublesInvPacket());
             }
         }

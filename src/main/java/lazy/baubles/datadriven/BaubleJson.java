@@ -2,7 +2,6 @@ package lazy.baubles.datadriven;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import lazy.baubles.datadriven.model.BaubleModel;
 import lazy.baubles.datadriven.model.EffectModel;
 import net.minecraft.util.GsonHelper;
@@ -28,7 +27,7 @@ public class BaubleJson {
 
     public static List<BaubleModel> loadBaubles() {
         List<BaubleModel> baubles = new ArrayList<>();
-        for (File file : getAllJsonBaubles()) {
+        for (var file : getAllJsonBaubles()) {
             if (baubles.stream().noneMatch(baubleModel -> baubleModel.getRegistryName().equals(read(file).getRegistryName()))) {
                 baubles.add(read(file));
             } else {
@@ -42,12 +41,12 @@ public class BaubleJson {
     public static BaubleModel read(File file) {
         BaubleModel baubleModel = null;
         try {
-            JsonObject json = GsonHelper.parse(new FileReader(file));
-            String registryName = GsonHelper.getAsString(json, "registryName", "");
-            String type = GsonHelper.getAsString(json, "type", "");
+            var json = GsonHelper.parse(new FileReader(file));
+            var registryName = GsonHelper.getAsString(json, "registryName", "");
+            var type = GsonHelper.getAsString(json, "type", "");
             boolean glint = GsonHelper.getAsBoolean(json, "glint", false);
             boolean showEffectTooltip = GsonHelper.getAsBoolean(json, "showEffectsTooltip", false);
-            String displayName = GsonHelper.getAsString(json, "displayName", "Ring");
+            var displayName = GsonHelper.getAsString(json, "displayName", "Ring");
             List<String> tooltips = new ArrayList<>();
             List<String> requireMod = new ArrayList<>();
             List<EffectModel> effects = new ArrayList<>();
@@ -80,9 +79,7 @@ public class BaubleJson {
             e.printStackTrace();
         }
         try (Stream<Path> walk = Files.walk(BAUBLES_PATH)) {
-
-            List<String> result = walk.map(x -> x.toString()).filter(f -> f.endsWith(".json")).collect(Collectors.toList());
-
+            List<String> result = walk.map(Path::toString).filter(f -> f.endsWith(".json")).collect(Collectors.toList());
             result.forEach(s -> jsonBaubles.add(new File(s)));
 
         } catch (IOException e) {
