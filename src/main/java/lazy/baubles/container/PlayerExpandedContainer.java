@@ -74,8 +74,8 @@ public class PlayerExpandedContainer extends AbstractContainerMenu {
     @Override
     public void slotsChanged(@Nonnull Container container) {
         try {
-            Method onCraftChange = ObfuscationReflectionHelper.findMethod(CraftingMenu.class, "func_217066_a", int.class, Level.class, Player.class, CraftingContainer.class, ResultContainer.class);
-            onCraftChange.invoke(null, this.containerId, this.player.level, this.player, this.craftMatrix, this.craftResult);
+            Method onCraftChange = ObfuscationReflectionHelper.findMethod(CraftingMenu.class, "slotChangedCraftingGrid", AbstractContainerMenu.class, Level.class, Player.class, CraftingContainer.class, ResultContainer.class);
+            onCraftChange.invoke(null, this, this.player.level, this.player, this.craftMatrix, this.craftResult);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
