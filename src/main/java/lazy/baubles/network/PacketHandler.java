@@ -1,6 +1,9 @@
 package lazy.baubles.network;
 
 import lazy.baubles.api.BaublesAPI;
+import lazy.baubles.network.msg.OpenBaublesInvPacket;
+import lazy.baubles.network.msg.OpenNormalInvPacket;
+import lazy.baubles.network.msg.SyncPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
@@ -15,7 +18,7 @@ public class PacketHandler {
     }
 
     public static void registerMessages() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(BaublesAPI.MOD_ID, "netchannel"), () -> "1.0", s -> true, s -> true);
+        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(BaublesAPI.MOD_ID, "net_channel"), () -> "1.0", s -> true, s -> true);
 
         INSTANCE.registerMessage(nextID(), OpenBaublesInvPacket.class, OpenBaublesInvPacket::toBytes, OpenBaublesInvPacket::new, OpenBaublesInvPacket::handle);
         INSTANCE.registerMessage(nextID(), OpenNormalInvPacket.class, OpenNormalInvPacket::toBytes, OpenNormalInvPacket::new, OpenNormalInvPacket::handle);

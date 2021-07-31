@@ -1,10 +1,8 @@
-package lazy.baubles.network;
+package lazy.baubles.network.msg;
 
 import lazy.baubles.api.cap.CapabilityBaubles;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
@@ -13,9 +11,9 @@ import java.util.function.Supplier;
 
 public class SyncPacket {
 
-    public int playerId;
-    public byte slot;
-    ItemStack bauble;
+    private final int playerId;
+    private final byte slot;
+    private final ItemStack bauble;
 
     public SyncPacket(FriendlyByteBuf buf) {
         this.playerId = buf.readInt();
@@ -38,9 +36,9 @@ public class SyncPacket {
     @SuppressWarnings("ConstantConditions")
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ClientLevel world = Minecraft.getInstance().level;
+            var world = Minecraft.getInstance().level;
             if (world == null) return;
-            Entity p = world.getEntity(playerId);
+            var p = world.getEntity(playerId);
             if (p instanceof Player) {
                 p.getCapability(CapabilityBaubles.BAUBLES).ifPresent(b -> b.setStackInSlot(slot, bauble));
             }
