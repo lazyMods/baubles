@@ -10,7 +10,6 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 version = "${mod_version}-${mc_version}"
 group = 'com.lazy.baubles'
@@ -58,9 +57,15 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        url 'https://pkgs.dev.azure.com/lazyio/maven/_packaging/lazy/maven/v1'
+        name 'lazy'
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-
 }
 
 jar {
@@ -79,33 +84,32 @@ jar {
 
 jar.finalizedBy('reobfJar')
 
-task srcJar (type: Jar) {
-    from sourceSets.main.java
-    classifier = 'sources'
-}
-
 task apiJar(type: Jar) {
     // Sources included because of MinecraftForge/ForgeGradle#369
     from(sourceSets.main.allJava)
     from(sourceSets.main.output)
-    include 'com/lazy/baubles/api/**'
+    include 'lazy/baubles/api/**'
 
-    classifier = 'api'
+    classifier("api")
 }
 
 artifacts {
-    archives srcJar, apiJar
+    archives(apiJar)
 }
 
 publishing {
     tasks.publish.dependsOn build
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def user = properties.getProperty('username')
+    def pass = properties.getProperty('password')
+
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'com.lazy'
+            groupId = 'lazy'
             artifactId = 'baubles'
             version = "${mod_version}"
-            from components.java
-            artifact srcJar
             artifact apiJar
             pom.withXml {
                 def node = asNode()
@@ -117,7 +121,12 @@ publishing {
 
     repositories {
         maven {
-            url = "file:///C:\\Users\\Utilizador\\Dropbox\\dropbox-mvn-repo"
+            url = 'https://pkgs.dev.azure.com/lazyio/maven/_packaging/lazy/maven/v1'
+            name 'lazy'
+            credentials {
+                username = user
+                password = pass
+            }
         }
     }
 }
