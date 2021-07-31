@@ -1,4 +1,4 @@
-package lazy.baubles;
+package lazy.baubles.setup;
 
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.container.PlayerExpandedContainer;

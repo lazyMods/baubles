@@ -4,13 +4,15 @@ import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.cap.CapabilityBaubles;
 import lazy.baubles.client.gui.PlayerExpandedScreen;
 import lazy.baubles.network.PacketHandler;
+import lazy.baubles.setup.ModItems;
+import lazy.baubles.setup.ModMenus;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
@@ -20,9 +22,10 @@ public class Baubles {
     public static final KeyMapping KEY_BAUBLES = new KeyMapping("keybind.baublesinventory", GLFW.GLFW_KEY_B, "key.categories.inventory");
 
     public Baubles() {
+        ModItems.init();
         ModMenus.init();
-        MinecraftForge.EVENT_BUS.addListener(this::setupCommon);
-        MinecraftForge.EVENT_BUS.addListener(this::setupClient);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {
@@ -35,7 +38,7 @@ public class Baubles {
         ClientRegistry.registerKeyBinding(KEY_BAUBLES);
     }
 
-    private void loadComplete(FMLLoadCompleteEvent event){
+    private void loadComplete(FMLLoadCompleteEvent event) {
         //TODO: Add IRenderBauble layers.
         /*Map<String, EntityRenderer<? extends Player>> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
         PlayerRenderer render;
