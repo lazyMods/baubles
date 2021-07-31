@@ -1,6 +1,14 @@
 package lazy.baubles.datadriven.model;
 
-public record EffectModel(int effectLevel, String effectRegistryName) {
+public class EffectModel {
+
+    private final int effectLevel;
+    private final String effectRegistryName;
+
+    public EffectModel(int effectLevel, String effectRegistryName){
+        this.effectLevel = effectLevel;
+        this.effectRegistryName = effectRegistryName;
+    }
 
     public int getEffectLevel() {
         return this.effectLevel;

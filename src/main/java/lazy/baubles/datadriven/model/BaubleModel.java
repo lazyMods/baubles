@@ -2,9 +2,27 @@ package lazy.baubles.datadriven.model;
 
 import java.util.List;
 
-public record BaubleModel(String type, String registryName, boolean glint, boolean showEffectsTooltip,
-                          String displayName, List<String> tooltips, List<String> requireMods,
-                          List<EffectModel> effects) {
+public class BaubleModel {
+
+    private final String type;
+    private final String registryName;
+    private final boolean glint;
+    private final boolean showEffectsTooltip;
+    private final String displayName;
+    private final List<String> tooltips;
+    private final List<String> requireMod;
+    private final List<EffectModel> effects;
+
+    public BaubleModel(String type, String registryName, boolean glint, boolean showEffectsTooltip, String displayName, List<String> tooltips, List<String> requireMods, List<EffectModel> effects) {
+        this.type = type;
+        this.registryName = registryName;
+        this.glint = glint;
+        this.displayName = displayName;
+        this.tooltips = tooltips;
+        this.effects = effects;
+        this.showEffectsTooltip = showEffectsTooltip;
+        this.requireMod = requireMods;
+    }
 
     public String getType() {
         return this.type;
@@ -31,7 +49,7 @@ public record BaubleModel(String type, String registryName, boolean glint, boole
     }
 
     public List<String> getRequiredMods() {
-        return this.requireMods;
+        return this.requireMod;
     }
 
     public String getRegistryName() {
