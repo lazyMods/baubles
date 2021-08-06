@@ -35,7 +35,6 @@ public class Baubles {
         ModMenus.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {
@@ -46,15 +45,5 @@ public class Baubles {
     private void setupClient(FMLClientSetupEvent event) {
         MenuScreens.register(ModMenus.PLAYER_BAUBLES.get(), PlayerExpandedScreen::new);
         ClientRegistry.registerKeyBinding(KEY_BAUBLES);
-    }
-
-    private void loadComplete(FMLLoadCompleteEvent event) {
-        Map<String, EntityRenderer<? extends Player>> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
-        PlayerRenderer render;
-        render = (PlayerRenderer) skinMap.get("default");
-        render.addLayer(new BaublesRenderLayer(render));
-
-        render = (PlayerRenderer) skinMap.get("slim");
-        render.addLayer(new BaublesRenderLayer(render));
     }
 }
