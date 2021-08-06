@@ -111,6 +111,7 @@ publishing {
             artifactId = 'baubles'
             version = "${mod_version}"
             artifact apiJar
+            from components.java
             pom.withXml {
                 def node = asNode()
                 if(node.dependencies.size() > 0)
