@@ -1,6 +1,8 @@
 package lazy.baubles.api.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import lazy.baubles.api.bauble.IBauble;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +22,7 @@ public interface IRenderBauble extends IBauble {
      * the RenderType passed in. Make sure to check against the type parameter for
      * rendering.
      */
-    void onPlayerBaubleRender(Player player, RenderType type, float partialTicks);
+    void onPlayerBaubleRender(PoseStack stack, Player player, RenderType type, float partialTicks);
 
 
     /**
@@ -32,61 +34,56 @@ public interface IRenderBauble extends IBauble {
          * Rotates the render for a bauble correctly if the player is sneaking.
          * Use for renders under {@link RenderType#BODY}.
          */
-        public static void rotateIfSneaking(Player player) {
+        public static void rotateIfSneaking(PoseStack stack, Player player) {
             if (player.isCrouching())
-                applySneakingRotation();
+                applySneakingRotation(stack);
         }
 
         /**
          * Rotates the render for a bauble correctly for a sneaking player.
          * Use for renders under {@link RenderType#BODY}.
          */
-        public static void applySneakingRotation() {
-            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
-            GL11.glTranslatef(0F, 0.2F, 0F);
-            GL11.glRotatef(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
+        public static void applySneakingRotation(PoseStack stack) {
+            stack.translate(0f, .2f, 0f);
+            stack.mulPose(Vector3f.XP.rotationDegrees(90f / (float)Math.PI));
         }
 
         /**
          * Shifts the render for a bauble correctly to the head, including sneaking rotation.
          * Use for renders under {@link RenderType#HEAD}.
          */
-        public static void translateToHeadLevel(Player player) {
-            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
-            GL11.glTranslatef(0, -player.getEyeHeight(), 0);
+        public static void translateToHeadLevel(PoseStack stack, Player player) {
+            stack.translate(0, -player.getEyeHeight(), 0);
             if (player.isCrouching())
-                GL11.glTranslatef(0.25F * Mth.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * Mth.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
+                stack.translate(0.25F * Mth.sin(player.yHeadRot * (float) Math.PI / 180), 0.25F * Mth.cos(player.yHeadRot * (float) Math.PI / 180), 0F);
         }
 
         /**
          * Shifts the render for a bauble correctly to the face.
-         * Use for renders under {@link RenderType#HEAD}, and usually after calling {@link Helper#translateToHeadLevel(PlayerEntity)}.
+         * Use for renders under {@link RenderType#HEAD}, and usually after calling {@link Helper#translateToHeadLevel(PoseStack, Player)}.
          */
-        public static void translateToFace() {
-            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
-            GL11.glRotatef(90F, 0F, 1F, 0F);
-            GL11.glRotatef(180F, 1F, 0F, 0F);
-            GL11.glTranslatef(0f, -4.35f, -1.27f);
+        public static void translateToFace(PoseStack stack) {
+            stack.mulPose(Vector3f.YP.rotationDegrees(90f));
+            stack.mulPose(Vector3f.XP.rotationDegrees(180f));
+            stack.translate(0f, -4.35f, -1.27f);
         }
 
         /**
          * Scales down the render to a correct size.
          * Use for any render.
          */
-        public static void defaultTransforms() {
-            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
-            GL11.glTranslatef(0.0f, 3.0f, 1.0f);
-            GL11.glScalef(0.55f, 0.55f, 0.55f);
+        public static void defaultTransforms(PoseStack stack) {
+            stack.translate(0.0f, 3.0f, 1.0f);
+            stack.scale(0.55f, 0.55f, 0.55f);
         }
 
         /**
          * Shifts the render for a bauble correctly to the chest.
-         * Use for renders under {@link RenderType#BODY}, and usually after calling {@link Helper#rotateIfSneaking(PlayerEntity)}.
+         * Use for renders under {@link RenderType#BODY}, and usually after calling {@link Helper#rotateIfSneaking(PoseStack, Player)}.
          */
-        public static void translateToChest() {
-            RenderSystem.assertThread(RenderSystem::isOnRenderThread);
-            GL11.glRotatef(180F, 1F, 0F, 0F);
-            GL11.glTranslatef(0F, -3.2F, -0.85F);
+        public static void translateToChest(PoseStack stack) {
+            stack.mulPose(Vector3f.XP.rotationDegrees(180f));
+            stack.translate(0F, -3.2F, -0.85F);
         }
     }
 

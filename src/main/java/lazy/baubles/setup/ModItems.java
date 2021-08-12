@@ -1,5 +1,6 @@
 package lazy.baubles.setup;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import lazy.baubles.api.BaublesAPI;
 import lazy.baubles.api.bauble.BaubleType;
 import lazy.baubles.api.bauble.IBauble;
@@ -22,7 +23,7 @@ public class ModItems {
         if (!BaubleJson.loadBaubles().isEmpty())
             ITEMS.register("bauble", () -> new BaubleJsonItem(BaubleJson.loadBaubles()));
 
-        ITEMS.register("test_bauble", TestItem::new);
+        //ITEMS.register("test_bauble", TestItem::new);
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
@@ -38,8 +39,8 @@ public class ModItems {
         }
 
         @Override
-        public void onPlayerBaubleRender(Player player, RenderType type, float partialTicks) {
-            System.out.println(player.getName());
+        public void onPlayerBaubleRender(PoseStack stack, Player player, RenderType type, float partialTicks) {
+            Helper.applySneakingRotation(stack);
         }
     }
 }
