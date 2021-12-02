@@ -3,19 +3,10 @@ package lazy.baubles.api.cap;
 import lazy.baubles.api.bauble.IBauble;
 import lazy.baubles.api.bauble.IBaublesItemHandler;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class CapabilityBaubles {
-
-    @CapabilityInject(IBaublesItemHandler.class)
-    public static final Capability<IBaublesItemHandler> BAUBLES = null;
-
-    @CapabilityInject(IBauble.class)
-    public static final Capability<IBauble> ITEM_BAUBLE = null;
-
-    public static void register(){
-        CapabilityManager.INSTANCE.register(IBaublesItemHandler.class);
-        CapabilityManager.INSTANCE.register(IBauble.class);
-    }
+    public static final Capability<IBaublesItemHandler> BAUBLES = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IBauble> ITEM_BAUBLE = CapabilityManager.get(new CapabilityToken<>() {});
 }

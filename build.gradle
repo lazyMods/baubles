@@ -15,9 +15,25 @@ version = "${mod_version}-${mc_version}"
 group = 'com.lazy.baubles'
 archivesBaseName = 'baubles'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+task replaceResources(type: Copy) {
+    outputs.upToDateWhen { false }
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+        expand 'version': version, 'forge_version': forge_version
+    }
+    into "$buildDir/resources/main"
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+    }
+    finalizedBy replaceResources
+}
+
 minecraft {
     mappings channel: "${mcp_channel}", version: "${mcp_version}"
     runs {
@@ -26,8 +42,11 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                baubles {
                     source sourceSets.main
+                }
+                baubles_test {
+                    source sourceSets.test
                 }
             }
         }
@@ -37,8 +56,11 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                baubles {
                     source sourceSets.main
+                }
+                baubles_test {
+                    source sourceSets.test
                 }
             }
         }
@@ -47,10 +69,13 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'baubles', '--all', '--output', file('src/generated/resources/')
             mods {
-                examplemod {
+                baubles {
                     source sourceSets.main
+                }
+                baubles_test {
+                    source sourceSets.test
                 }
             }
         }
@@ -71,12 +96,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Title": "baubles",
+            "Specification-Vendor": "baublessareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"baublessareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -102,8 +127,8 @@ publishing {
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    def user = properties.getProperty('username')
-    def pass = properties.getProperty('password')
+    def user = properties.getProperty('user')
+    def pass = properties.getProperty('pass')
 
     publications {
         mavenJava(MavenPublication) {

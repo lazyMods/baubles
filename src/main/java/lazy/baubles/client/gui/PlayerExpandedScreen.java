@@ -29,7 +29,7 @@ public class PlayerExpandedScreen extends EffectRenderingInventoryScreen<PlayerE
     @Override
     public void containerTick() {
         this.menu.baubles.setEventBlock(false);
-        this.checkEffectRendering();
+        this.canSeeEffects();
         this.resetGuiLeft();
     }
 
