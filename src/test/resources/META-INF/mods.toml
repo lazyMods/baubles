@@ -1,9 +1,9 @@
 modLoader="javafml" #mandatory
-loaderVersion="${forge_version}" #mandatory (37 is current forge version)
+loaderVersion="${forge_version}" #mandatory
 license="ANS3.0NC" #mandatory
 issueTrackerURL="https://github.com/lazyMods/Baubles/issues" #optional
 [[mods]] #mandatory
-modId="baubles" #mandatory
+modId="baubles_test" #mandatory
 version="${version}" #mandatory
 displayName="Baubles" #mandatory
 logoFile="BLogo.png" #optional
