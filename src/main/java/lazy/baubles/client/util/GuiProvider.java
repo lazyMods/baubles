@@ -6,7 +6,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,7 +15,7 @@ public class GuiProvider implements MenuProvider {
     @Override
     @Nonnull
     public Component getDisplayName() {
-        return new TextComponent("PlayerBaublesInv");
+        return Component.literal("PlayerBaublesInv");
     }
 
     @Nullable
