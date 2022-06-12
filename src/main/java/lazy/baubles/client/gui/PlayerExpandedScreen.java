@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -44,7 +43,7 @@ public class PlayerExpandedScreen extends EffectRenderingInventoryScreen<PlayerE
     @Override
     protected void renderLabels(@Nonnull PoseStack matrixStack, int mouseX, int mouseY) {
         if (this.minecraft != null) {
-            this.minecraft.font.draw(matrixStack, new TranslatableComponent("container.crafting"), 115, 8, 4210752);
+            this.minecraft.font.draw(matrixStack, Component.translatable("container.crafting"), 115, 8, 4210752);
         }
     }
 

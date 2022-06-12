@@ -12,8 +12,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 
@@ -26,7 +25,7 @@ public class BaublesButton extends AbstractButton {
     private final Minecraft minecraft;
 
     public BaublesButton(AbstractContainerScreen parentGui, int x, int y, int width, int height) {
-        super(x + parentGui.getGuiLeft(), parentGui.getGuiTop() + y, width, height, new TextComponent(""));
+        super(x + parentGui.getGuiLeft(), parentGui.getGuiTop() + y, width, height, Component.empty());
         this.parentGui = parentGui;
         this.minecraft = Minecraft.getInstance();
     }
@@ -66,7 +65,7 @@ public class BaublesButton extends AbstractButton {
                     this.blit(poseStack, x, this.y, 200, 48, 10, 10);
                 } else {
                     this.blit(poseStack, x, this.y, 210, 48, 10, 10);
-                    this.minecraft.font.draw(poseStack, new TranslatableComponent("button.displayText").getString(), x + 5, this.y + this.height, 0xffffff);
+                    this.minecraft.font.draw(poseStack, Component.translatable("button.displayText").getString(), x + 5, this.y + this.height, 0xffffff);
                 }
                 poseStack.popPose();
             }
